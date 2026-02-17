@@ -1,0 +1,54 @@
+import { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Home from './pages/Home';
+import SignUp from './pages/auth/SignUp';
+import Login from './pages/auth/Login';
+import FactStation from './pages/FactStation';
+import MemoryGame from './pages/games/MemoryGame';
+import Sudoku from './pages/games/Sudoku';
+import WordSearch from './pages/games/WordSearch';
+import FlipFlop from './pages/games/FlipFlop';
+import Navbar from './components/layout/Navbar';
+import Footer from './components/layout/Footer';
+
+function App() {
+ 
+  const [darkMode, setDarkMode] = useState(false);
+
+  const toggleDarkMode = () => setDarkMode(!darkMode);
+
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, [darkMode]);
+
+  return (
+    <Router>
+      
+      <div className="min-h-screen bg-white dark:bg-black text-black dark:text-white transition-colors duration-300">
+        
+        <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
+        
+        <main className="pt-24 px-6 min-h-[70vh]">
+          <Routes>
+            <Route path="/" element={<Home />} /> 
+            <Route path="/signup" element={<SignUp />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/activities/fact-station" element={<FactStation />} />
+            <Route path="/activities/logic" element={<MemoryGame />} />
+            <Route path="/activities/logic/sudoku" element={<Sudoku />} />
+            <Route path="/activities/logic/word-search" element={<WordSearch />} />
+            <Route path="/activities/logic/flip-flop" element={<FlipFlop />} />
+          </Routes>
+        </main>
+
+        <Footer />
+      </div>
+    </Router>
+  );
+}
+
+export default App;
