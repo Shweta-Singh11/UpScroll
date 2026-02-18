@@ -1,28 +1,48 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import {RotateCcw, Zap } from "lucide-react";
+import { useNavigate } from 'react-router-dom';
 
-const GRID_SIZE = 10; //username,wordsfound,gameAttempts
+const GRID_SIZE = 10; 
 
 const WordSearch = () => {
+  const navigate = useNavigate();
   const [grid, setGrid] = useState([]);
   const [words, setWords] = useState([]); 
   const [wordsFound, setWordsFound] = useState([]);
   const [foundCells, setFoundCells] = useState([]);
   const [timer, setTimer] = useState(60);
   const [score, setScore] = useState(0);
-  const [gameActive, setGameActive] = useState(false);
   const [gameState, setGameState] = useState('idle');
   const [isSelecting, setIsSelecting] = useState(false);
   const [selectionStart, setSelectionStart] = useState(null); 
   const [currentSelection, setCurrentSelection] = useState([]);
+  const [gameAttempts, setGameAttempts] = useState(0);
+  const username = "Jude";
   
   const fetchWords = async () => {
     try {
-      const response = await fetch("http://<MY_WIFI_IP>:8080/api/users/{username}/wordsearch?wordsFound={number}&gameAttempts={number}");
+      const response = await fetch("https://brain-backend-2-5onn.onrender.com/api/games/wordsearch/generate");
       const data = await response.json(); 
       setWords(data.map(w => w.toUpperCase()));
     } catch (error) {
       console.error("Backend fetch failed, using fallbacks");
       setWords(["REACT", "NODE", "BRAIN", "LOGIC", "DOOM", "VOID", "SOUL", "SPACE","MEMORY","FACTS"].map(w => w.toUpperCase()));
+    }
+  };
+
+  const syncGameStats = async (finalWords = wordsFound, attempts = gameAttempts) => {
+    try {
+      const response = await fetch(`https://brain-backend-2-5onn.onrender.com/api/users/${username}/wordsearch?wordsFound=${finalWords.length}&gameAttempts=${attempts}`, {
+        method: "POST"
+      });
+
+      if (!response.ok) throw new Error("Sync failed");
+      const playerData = await response.json();
+      console.log("Official Player Data from Backend:", playerData);
+
+      setScore(playerData.wordSearchScore || 0);
+    } catch (error) {
+      console.error("Backend Sync Error:", error);
     }
   };
 
@@ -77,6 +97,7 @@ const WordSearch = () => {
       interval = setInterval(() => setTimer(t => t - 1), 1000);
     } else if (timer === 0 && gameState === 'playing') {
       setGameState('lost');
+      syncGameStats();
     }
     return () => clearInterval(interval);
   }, [gameState, timer]);
@@ -86,6 +107,12 @@ const WordSearch = () => {
       setGameState('won');
     }
   }, [wordsFound, words, gameState]);
+
+  useEffect(() => {
+    if (gameState === 'won' || gameState === 'lost') {
+      syncGameStats();
+    }
+  }, [gameState]);
 
 // Interaction
   const handleMouseDown = (r, c) => {
@@ -123,38 +150,62 @@ const WordSearch = () => {
   };
 
   const handleStart = () => {
+    if (gameAttempts >= 3) {
+      setGameState('max_attempts');
+      return;
+    }
+    const newAttempts = gameAttempts + 1;
+    setGameAttempts(newAttempts);
+    
     generateGameGrid();
     setTimer(60);
     setScore(0);
     setWordsFound([]);
     setFoundCells([]);
-    setGameState('playing');
+    setGameState('playing'); 
   };
 
   return (
-    <div className="min-h-screen pt-24 pb-12 bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 font-sans" onMouseUp={handleMouseUp}>
-      <div className="max-w-6xl mx-auto px-6">
-        <header className="text-center mb-10">
-          <h1 className="text-5xl font-extrabold tracking-tight bg-linear-to-r from-purple-800 to-blue-500 bg-clip-text text-transparent mb-2">Word Search</h1>
-          <p className="text-zinc-400 font-medium">Sharp eyes, sharp mind.</p>
+    <div className="min-h-screen w-full pt-24 pb-12 px-6 relative overflow-hidden bg-[#1a1818] text-white font-sans" onMouseUp={handleMouseUp}>
+      
+      {/* Background Orbs */}
+      <div className="absolute top-0 right-0 w-96 h-96 bg-cyan-500/10 rounded-full blur-[120px]"></div>
+      <div className="absolute top-0 left-0 w-96 h-96 bg-violet-500/10 rounded-full blur-[120px]"></div>
+      <div className="absolute bottom-0 left-0 w-96 h-96 bg-red-500/10 rounded-full blur-[120px]"></div>
+      <div className="absolute bottom-0 right-0 w-96 h-96 bg-green-500/10 rounded-full blur-[120px]"></div>
+
+      <div className="max-w-6xl mx-auto relative z-10">
+        <header className="text-center mb-16">
+          <h1 className="text-6xl font-black italic tracking-tighter uppercase leading-none mb-2">
+            Word <span className="bg-linear-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent pr-4">SEARCH</span>
+          </h1>
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-[10px] font-black uppercase tracking-widest">
+            <Zap size={12} fill="currentColor" />
+            <span>Welcome! {username}</span>
+          </div>
         </header>
 
-        <div className="flex flex-col lg:flex-row gap-12 items-center justify-center">
-          {/* list */}
-          <div className="w-full lg:w-64 bg-white dark:bg-zinc-900 p-6 rounded-4xl shadow-sm border border-zinc-100 dark:border-zinc-800">
-            <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 mb-4 text-center">Words</h3>
+        <div className="flex flex-col lg:flex-row gap-12 items-start justify-center">
+          
+          {/* Word List */}
+          <div className="w-full lg:w-64 bg-[#111]/50 backdrop-blur-xl p-6 rounded-4xl border border-white/10 shadow-2xl">
+            <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500 mb-6 text-center">Words List</h3>
             <div className="flex flex-wrap lg:flex-col gap-2">
               {words.map((word, idx) => (
-                <span key={idx} className={`px-4 py-1.5 rounded-xl text-sm font-bold text-center transition-all ${wordsFound.includes(word) ? 'bg-emerald-50 text-emerald-500 dark:bg-emerald-900/20 line-through' : 'bg-zinc-50 dark:bg-zinc-800 text-zinc-500'}`}>
+                <span key={idx} className={`px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition-all border ${
+                  wordsFound.includes(word) 
+                    ? 'bg-emerald-400/10 text-emerald-400 border-emerald-400/30 line-through opacity-90' 
+                    : 'bg-white/5 text-zinc-400 border-white/5'
+                }`}>
                   {word}
                 </span>
               ))}
             </div>
           </div>
 
-          {/* grid */}
+          {/* Grid Area */}
           <div className="relative flex flex-col items-center">
-            <div className="grid grid-cols-10 gap-2 p-4 bg-white dark:bg-zinc-900 rounded-[2.5rem] shadow-xl border border-zinc-100 dark:border-zinc-800 select-none relative overflow-hidden">
+            <div className="grid grid-cols-10 gap-1.5 p-3 bg-[#111]/50 backdrop-blur-xl rounded-[2.5rem] border border-white/10 shadow-[0_0_50px_-12px_rgba(0,0,0,0.5)] select-none relative overflow-hidden">
               {grid.map((row, rIdx) => 
                 row.map((letter, cIdx) => {
                   const isSelected = currentSelection.some(c => c.r === rIdx && c.c === cIdx);
@@ -164,8 +215,12 @@ const WordSearch = () => {
                       key={`${rIdx}-${cIdx}`}
                       onMouseDown={() => handleMouseDown(rIdx, cIdx)}
                       onMouseEnter={() => handleMouseEnter(rIdx, cIdx)}
-                      className={`w-9 h-9 md:w-11 md:h-11 flex items-center justify-center rounded-xl font-bold text-lg transition-all duration-150
-                        ${isSelected ? 'bg-blue-500 text-white shadow-lg' : isFound ? 'bg-emerald-400 text-white' : 'text-zinc-400 dark:text-zinc-500'}`}
+                      className={`w-9 h-9 md:w-11 md:h-11 flex items-center justify-center rounded-xl font-black text-sm transition-all duration-150 border
+                        ${isSelected 
+                          ? 'bg-cyan-500 text-black border-cyan-400 shadow-[0_0_20px_rgba(34,211,238,0.4)] scale-90' 
+                          : isFound 
+                          ? 'bg-violet-500/50 text-violet-400 border-violet-500/30 opacity-90' 
+                          : 'bg-white/5 text-zinc-500 border-transparent hover:border-white/20 hover:text-white hover:bg-white/10'}`}
                     >
                       {letter}
                     </div>
@@ -173,64 +228,122 @@ const WordSearch = () => {
                 })
               )}
 
-              {/* start button */}
+              {/* Rules Overlay */}
               {gameState === 'idle' && (
-                <div className="absolute inset-0 bg-white/40 dark:bg-black/40 backdrop-blur-[2px] flex items-center justify-center z-20">
-                  <button onClick={handleStart} className="px-12 py-4 bg-zinc-900 dark:bg-white text-white dark:text-black rounded-full font-black uppercase tracking-widest shadow-2xl hover:scale-105 transition-transform">
-                    Let's Begin!
-                  </button>
+                <div className="absolute inset-0 bg-[#050505]/95 backdrop-blur-xl flex items-center justify-center z-20 p-4">
+                  <div className="max-w-md w-full animate-in fade-in zoom-in duration-500">
+                    <div className="bg-[#111] border border-white/10 rounded-4xl p-8 shadow-2xl relative overflow-hidden">
+                      <div className="absolute -top-24 -right-24 w-48 h-48 bg-cyan-500/10 rounded-full blur-3xl"></div>
+                      
+                      <h3 className="text-2xl font-black italic uppercase tracking-tighter text-white mb-6 flex items-center gap-3">
+                        <span className="w-8 h-8 rounded-lg bg-cyan-500 flex items-center justify-center text-black not-italic text-sm">!</span>
+                        Game Rules
+                      </h3>
+
+                      <ul className="space-y-4 mb-10 text-left">
+                        {[
+                          "Maximum of 3 attempts allowed.",
+                          "Found words earn 5 points each.",
+                          "1st Attempt: Full score yield.",
+                          "2nd Attempt: -5 point penalty.",
+                          "3rd Attempt: -10 point penalty.",
+                          "Last attempt determines Brainrot score.",
+                          "Only listed words are valid data."
+                        ].map((rule, i) => (
+                          <li key={i} className="flex gap-3 items-start text-[10px] font-black text-zinc-400 uppercase tracking-widest leading-tight">
+                            <span className="text-cyan-400">▶</span>
+                            {rule}
+                          </li>
+                        ))}
+                      </ul>
+
+                      <button 
+                        onClick={handleStart} 
+                        className="w-full py-5 bg-white text-black rounded-2xl font-black uppercase tracking-widest shadow-xl hover:bg-cyan-400 transition-all active:scale-95 group flex items-center justify-center gap-3"
+                      >
+                        Let's Begin!
+                        <Zap size={18} className="fill-current" />
+                      </button>
+                    </div>
+                  </div>
                 </div>
               )}
             </div>
 
-            <button onClick={handleStart} className="group mt-10 px-8 py-3 bg-white dark:bg-zinc-900 
-               border-2 border-zinc-200 dark:border-zinc-700 
-               rounded-full flex items-center gap-3
-               shadow-[0_4px_20px_-4px_rgba(0,0,0,0.1)] 
-               hover:shadow-[0_8px_30px_-4px_rgba(0,0,0,0.15)]
-               hover:border-blue-400 dark:hover:border-blue-500
-               transition-all duration-300 active:scale-95">
-                <span className="text-blue-500 group-hover:rotate-180 transition-transform duration-500">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/>
-                    <path d="M21 3v5h-5"/>
-                    <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/>
-                    <path d="M3 21v-5h5"/>
-                  </svg>
-                </span>
-                <span className="text-sm font-black uppercase tracking-[0.15em] text-zinc-600 dark:text-zinc-300 group-hover:text-zinc-900 dark:group-hover:text-white">
-                  Restart 
-                </span>
-            </button>
+            {/* Controls */}
+            <div className="flex gap-4">
+               <button onClick={handleStart} className="group mt-10 px-8 py-4 bg-[#111] border border-white/10 rounded-full flex items-center gap-3 shadow-2xl hover:border-cyan-500 transition-all active:scale-95">
+                  <span className="text-cyan-400 group-hover:rotate-180 transition-transform duration-500">
+                    <RotateCcw size={20} />
+                  </span>
+                  <span className="text-xs font-black uppercase tracking-widest text-zinc-400 group-hover:text-white">Restart</span>
+               </button>
+
+               <button onClick={() => navigate("/")} className="mt-10 px-8 py-4 bg-white text-black rounded-full flex items-center gap-3 shadow-xl hover:bg-cyan-400 transition-all active:scale-95 text-xs font-black uppercase tracking-widest">
+                  Know your Brainrot Score
+               </button>
+            </div>
           </div>
 
-          {/* side buttons */}
+          {/* Right Side Metrics */}
           <div className="w-full lg:w-64 space-y-4">
-            <div className="p-6 bg-white dark:bg-zinc-900 rounded-4xl shadow-sm border border-zinc-100 dark:border-zinc-800 text-center">
-              <p className="text-[10px] font-black uppercase tracking-widest text-zinc-400 mb-1">Time</p>
-              <p className={`text-4xl font-black ${timer < 20 ? 'text-rose-500 animate-pulse' : ''}`}>{Math.floor(timer / 60)}:{(timer % 60).toString().padStart(2, '0')}</p>
-            </div>
-            <div className="p-6 bg-white dark:bg-zinc-900 rounded-4xl shadow-sm border border-zinc-100 dark:border-zinc-800 text-center">
-              <p className="text-[10px] font-black uppercase tracking-widest text-zinc-400 mb-1">Progress</p>
-              <p className="text-4xl font-black text-blue-500">{Math.round(score)}%</p>
-            </div>
+            {[
+              { label: 'Time Remaining', val: `${Math.floor(timer / 60)}:${(timer % 60).toString().padStart(2, '0')}`, color: timer < 20 ? 'text-rose-500 animate-pulse' : 'text-white' },
+              { label: 'Progress', val: `${Math.round(score)}%`, color: 'text-cyan-400' },
+              { label: 'Attempts', val: gameAttempts, color: 'text-violet-400' }
+            ].map((stat, i) => (
+              <div key={i} className="p-6 bg-[#111]/50 backdrop-blur-xl rounded-4xl border border-white/10 shadow-2xl text-center">
+                <p className="text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-2">{stat.label}</p>
+                <p className={`text-4xl font-black italic tracking-tighter ${stat.color}`}>{stat.val}</p>
+              </div>
+            ))}
           </div>
         </div>
       </div>
 
-      {/* win/lost */}
+      {/* Result Modals */}
       {(gameState === 'won' || gameState === 'lost') && (
-        <div className="fixed inset-0 bg-zinc-900/60 backdrop-blur-md flex items-center justify-center z-50 p-6">
-          <div className="bg-white dark:bg-zinc-900 p-12 rounded-[3rem] shadow-2xl text-center max-w-sm w-full border border-zinc-100 dark:border-zinc-800">
-            <h2 className="text-4xl font-black mb-4 uppercase italic">
-              {gameState === 'won' ? "Champion!" : "Time's Up"}
+        <div className="fixed inset-0 bg-[#050505]/90 backdrop-blur-xl flex items-center justify-center z-50 p-6">
+          <div className="bg-[#111] p-12 rounded-[3rem] shadow-2xl text-center max-w-sm w-full border border-white/10">
+            <h2 className={`text-5xl font-black mb-6 uppercase italic tracking-tighter ${gameState === 'won' ? 'text-emerald-400' : 'text-rose-500'}`}>
+              {gameState === 'won' ? "GOOD JOB!" : "TIME'S UP!"}
             </h2>
-            <p className="text-zinc-500 font-medium mb-8">
-              {gameState === 'won' ? "Good Job, you are a champion! You've cleared the digital void." : `Mission failed. You reached ${Math.round(score)}% completion.`}
+            <p className="text-zinc-400 font-bold uppercase tracking-tight text-[10px] mb-10 leading-relaxed">
+              {gameState === 'won' 
+                ? `Congratulations, ${username}. Your Score is ${score}.` 
+                : score > 0 ? `You can do better, ${username}. Score: ${score}.` : "Syncing results..."}
             </p>
-            <button onClick={handleStart} className={`w-full py-4 rounded-2xl font-bold shadow-lg transition-transform hover:scale-[1.02] ${gameState === 'won' ? 'bg-emerald-500 text-white' : 'bg-blue-600 text-white'}`}>
+            <button onClick={handleStart} className="w-full py-5 bg-white text-black rounded-2xl font-black uppercase tracking-widest shadow-xl hover:bg-cyan-400 transition-all">
               Try Again
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* Max Attempts Reached  */}
+      {gameState === 'max_attempts' && (
+        <div className="fixed inset-0 bg-[#050505]/95 backdrop-blur-2xl flex items-center justify-center z-100 p-6">
+          <div className="bg-[#111] p-12 rounded-[3rem] shadow-[0_0_100px_-20px_rgba(244,63,94,0.3)] text-center max-w-sm w-full border border-rose-500/20">
+            <div className="w-20 h-20 bg-blue-500/10 rounded-2xl flex items-center justify-center mx-auto mb-8 border border-blue-500/20">
+              <Zap size={40} className="text-blue-500 fill-blue-500 animate-pulse" />
+            </div>
+            
+            <h2 className="text-2xl font-black text-blue-500 font-sans mb-4 uppercase tracking-tighter leading-none">
+              MAX ATTEMPTS REACHED
+            </h2>
+            
+            <p className="text-zinc-500 font-bold uppercase tracking-tight text-[15px] mb-10 leading-relaxed">
+               {username}, you have utilized all 3 permitted attempts for this session.
+            </p>
+
+            <div className="space-y-4">
+              <button 
+                onClick={() => navigate("/")}
+                className="w-full py-5 bg-white text-black rounded-2xl font-black uppercase tracking-widest shadow-xl hover:bg-blue-500 hover:text-white transition-all active:scale-95"
+              >
+                Return
+              </button>
+            </div>
           </div>
         </div>
       )}

@@ -13,7 +13,7 @@ import Footer from './components/layout/Footer';
 
 function App() {
  
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(true);
 
   const toggleDarkMode = () => setDarkMode(!darkMode);
 
@@ -28,11 +28,11 @@ function App() {
   return (
     <Router>
       
-      <div className="min-h-screen bg-white dark:bg-black text-black dark:text-white transition-colors duration-300">
+      <div className="min-h-screen w-full bg-white dark:bg-black text-black dark:text-white transition-colors duration-300">
         
         <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
         
-        <main className="pt-24 px-6 min-h-[70vh]">
+        <main className="w-full ">
           <Routes>
             <Route path="/" element={<Home />} /> 
             <Route path="/signup" element={<SignUp />} />
