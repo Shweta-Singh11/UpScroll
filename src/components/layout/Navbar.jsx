@@ -9,11 +9,19 @@ const Navbar = ({ darkMode, toggleDarkMode }) => {
         <Link to="/" className="font-black text-xl tracking-tighter text-black dark:text-white uppercase italic">
           Doom
         </Link>
-        <div className="hidden md:flex gap-6">
-          <a href="/about" className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-blue-500 transition">About Us</a>
-          <a href="/activities" className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-blue-500 transition">Something</a>
-          <a href="/score" className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-blue-500 transition">Something</a>
-        </div>
+          <div className="hidden md:flex gap-6">
+            <Link to="/activities/logic" className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-blue-500 transition">
+              Memory & Logic 
+            </Link>
+      
+            <Link to="/activities/fact-station" className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-blue-500 transition">
+              Facts Station
+            </Link>
+            
+            <Link to="activities/creative" className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-blue-500 transition">
+              Creative Thinking
+            </Link>
+          </div>
       </div>
 
       <div className="flex items-center gap-4">

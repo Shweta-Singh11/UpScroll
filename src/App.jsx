@@ -8,6 +8,10 @@ import MemoryGame from './pages/games/MemoryGame';
 import Sudoku from './pages/games/Sudoku';
 import WordSearch from './pages/games/WordSearch';
 import FlipFlop from './pages/games/FlipFlop';
+import CreativeThinking from './pages/creativeStation/CreativeThinking';
+import CaptionWriting from './pages/creativeStation/Caption';
+import StoryWriting from './pages/creativeStation/Story';
+import Journal from './pages/creativeStation/Journaling';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 
@@ -42,6 +46,10 @@ function App() {
             <Route path="/activities/logic/sudoku" element={<Sudoku />} />
             <Route path="/activities/logic/word-search" element={<WordSearch />} />
             <Route path="/activities/logic/flip-flop" element={<FlipFlop />} />
+            <Route path="/activities/creative" element={<CreativeThinking />} />
+            <Route path="/activities/creative/caption" element={<CaptionWriting />} />
+            <Route path="/activities/creative/story" element={<StoryWriting/>} />
+            <Route path="/activities/creative/journal" element={<Journal/>} />
           </Routes>
         </main>
 

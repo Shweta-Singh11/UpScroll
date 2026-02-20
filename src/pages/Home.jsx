@@ -25,7 +25,7 @@ const Home = () => {
       title: "Creative Writing",
       description: "Level up your technical prowess in the dev environment.",
       bgColor: "from-emerald-400 to-teal-600",
-      path: "/activities/caption",
+      path: "/activities/creative",
       icon: <SquarePen size={32} />
 
     }

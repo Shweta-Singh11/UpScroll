@@ -1,56 +1,56 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import { Brain, Search, LayoutGrid, Zap } from "lucide-react";
-import ActivityCard from "../../components/ui/Activities";
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { PenTool, BookOpen, MessageSquare,Zap } from 'lucide-react';
 
-const MemoryGame = () => {
-    const navigate=useNavigate();
-  const games = [
-    {
-      title: "Sudoku",
-      description: "Classical 9x9 grid puzzles to test your logical deduction skills.",
+const CreativeThinking = () => {
+  const navigate = useNavigate();
+  const modules=[
+    { 
+      title: 'Caption Writing', 
+      icon: <MessageSquare size={32} />, 
+      desc: 'Sharpen your wit by creating high-impact captions for diverse imagery.',
       bgColor: "from-blue-400 to-indigo-600", 
-      path: "/activities/logic/sudoku",
-      icon: <LayoutGrid size={32} />
+      path: '/activities/creative/caption'
     },
-    {
-      title: "Word Search",
-      description: "Find hidden patterns in a sea of letters to boost your recognition.",
+    { 
+      title: 'Finish the Story', 
+      icon: <BookOpen size={32} />, 
+      desc: 'We give you the spark; you build the flame. Complete the narrative arc.',
       bgColor: "from-fuchsia-500 to-rose-500",
-      path: "/activities/logic/word-search",
-      icon: <Search size={32} />
+      path: '/activities/creative/story'
     },
-    {
-      title: "Flip Flop",
-      description: "A fast-paced memory matching game to sharpen your focus.",
+    { 
+      title: 'Journaling', 
+      icon: <PenTool size={32} />, 
+      desc: 'Digital detox through deep reflection and structured thought dumping.',
       bgColor: "from-cyan-400 to-blue-500",
-      path: "/activities/logic/flip-flop",
-      icon: <Brain size={32} />
+      path: '/activities/creative/journal'
     }
   ];
 
   return (
-    <div className="min-h-screen w-full pt-24 pb-12 px-6 relative overflow-hidden bg-[#0f172a]">
+    <div className="min-h-screen w-full pt-24 pb-12 px-6 relative overflow-hidden bg-[#0f172a] text-white">
+      {/* Neural Background Orbs */}
       <div className="absolute top-[-10%] left-[-10%] w-96 h-96 bg-purple-600/20 rounded-full blur-[120px] animate-pulse"></div>
       <div className="absolute bottom-[-10%] right-[-10%] w-80 h-80 bg-blue-600/20 rounded-full blur-[100px]"></div>
 
-      <div className="max-w-6xl mx-auto relative z-10">
-        <header className="text-center mb-20 space-y-4">
-          <h1 className="text-6xl md:text-7xl font-black uppercase italic tracking-tighter">
+      <div className="max-w-6xl mx-auto relative z-10 ">
+        <header className="mb-20 space-y-4">
+          <h1 className="text-6xl md:text-7xl font-black uppercase italic tracking-tighter text-center">
             <span className="bg-linear-to-r from-violet-400 via-fuchsia-400 to-cyan-400 bg-clip-text text-transparent drop-shadow-sm pr-4">
-              Memory & Logic
+              Creative Thinking
             </span>
           </h1>
-          <p className="text-zinc-400 text-lg md:text-xl font-medium max-w-2xl mx-auto leading-relaxed">
-            Select a quest to sharpen your cognitive functions and clear the digital void.
+          <p className="text-zinc-400 text-lg md:text-xl font-medium max-w-2xl mx-auto leading-relaxed text-center">
+            Strengthen your parietal lobe through active expression.
           </p>
         </header>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 items-center">
-          {games.map((game, index) => (
+          {modules.map((module,index) => (
             <div 
               key={index} 
-              onClick={() => navigate(game.path)}
+              onClick={() => navigate(module.path)}
               className={`group relative cursor-pointer transition-all duration-500 hover:-translate-y-4 
                 ${index === 1 ? 'md:scale-110 z-20' : 'md:scale-95'}`}
             >
@@ -58,16 +58,16 @@ const MemoryGame = () => {
                               shadow-[0_20px_50px_rgba(0,0,0,0.3)] group-hover:shadow-[0_20px_50px_rgba(139,92,246,0.3)]
                               group-hover:border-white/20 transition-all">
                 
-                <div className={`w-16 h-16 mb-6 rounded-2xl flex items-center justify-center bg-linear-to-br ${game.bgColor} 
+                <div className={`w-16 h-16 mb-6 rounded-2xl flex items-center justify-center bg-linear-to-br ${module.bgColor} 
                                 text-white shadow-lg group-hover:scale-110 transition-transform duration-500`}>
-                  {game.icon}
+                  {module.icon}
                 </div>
 
                 <h2 className="text-2xl font-black text-white mb-3 uppercase tracking-tight italic">
-                  {game.title}
+                  {module.title}
                 </h2>
                 <p className="text-zinc-400 text-sm leading-relaxed mb-8">
-                  {game.description}
+                  {module.desc}
                 </p>
 
                 <div className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.2em] text-cyan-400 group-hover:text-white transition-colors">
@@ -76,7 +76,7 @@ const MemoryGame = () => {
                 </div>
               </div>
 
-              <div className={`absolute inset-0 -z-10 bg-linear-to-br ${game.bgColor} opacity-0 group-hover:opacity-20 blur-3xl transition-opacity duration-500 rounded-[2.5rem]`}></div>
+              <div className={`absolute inset-0 -z-10 bg-linear-to-br ${module.bgColor} opacity-0 group-hover:opacity-20 blur-3xl transition-opacity duration-500 rounded-[2.5rem]`}></div>
             </div>
           ))}
         </div>
@@ -94,4 +94,4 @@ const MemoryGame = () => {
   );
 };
 
-export default MemoryGame;
+export default CreativeThinking;

@@ -32,7 +32,7 @@ const WordSearch = () => {
 
   const syncGameStats = async (finalWords = wordsFound, attempts = gameAttempts) => {
     try {
-      const response = await fetch(`https://brain-backend-2-5onn.onrender.com/api/users/${username}/wordsearch?wordsFound=${finalWords.length}&gameAttempts=${attempts}`, {
+      const response = await fetch(`https://brain-backend-2-5onn.onrender.com/api/games/${username}/wordsearch?wordsFound=${finalWords.length}&gameAttempts=${attempts}`, {
         method: "POST"
       });
 
