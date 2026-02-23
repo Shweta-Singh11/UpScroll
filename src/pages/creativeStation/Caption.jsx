@@ -61,6 +61,7 @@ const categories = [
 ];
 
 const CaptionWriting = () => {
+  const [selectedId, setSelectedId] = useState(null);
   const [selectedCtg, setSelectedCtg] = useState(null);
   const [caption, setCaption] = useState("");
   const [currentImg, setCurrentImg] = useState(null);
@@ -68,6 +69,7 @@ const CaptionWriting = () => {
   const [feedback, setFeedback] = useState(null);
   const [specialEvent, setSpecialEvent] = useState(null);
   const [phase, setPhase] = useState("Inhale");
+  const [showAura, setShowAura] = useState(false);
   const username = "Jude";
 
   const handleFetchImg = async (activity) => {
@@ -90,7 +92,7 @@ const CaptionWriting = () => {
       });
       return;
     }
-
+    setSelectedId(activity.id);
     setSelectedCtg(activity.title);
     try {
     // Send category ID and username to backend
@@ -108,27 +110,42 @@ const CaptionWriting = () => {
   };
 
   const handleSubmitCaption = async () => {
-    setIsSyncing(true);
-    try {
-      // Send image ID, caption, and username for review
-      const response = await fetch(`https://brain-backend-2-5onn.onrender.com/api/review-caption`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          imageId: currentImg.id, 
-          caption, 
-          username 
-        })
-      });
-      const result = await response.json();
-      // result 
-      setFeedback(result); 
-    } catch (error) {
-      console.error("Transmission Interrupted", error);
-    } finally {
-      setIsSyncing(false);
+  // Safety check to ensure an image exists before sending
+  if (!currentImg || !currentImg.url) {
+    console.error("No image found to submit");
+    return;
+  }
+
+  setIsSyncing(true);
+  try {
+    // 1. Initialize FormData for HTML Form submission
+    const formData = new FormData();
+    formData.append("category", selectedCtg); // Sending the category title
+    formData.append("imageUrl", currentImg.url);
+    formData.append("caption", caption);
+    formData.append("username", username); // Including "Jude" as required by the backend
+
+    // 2. Execute the fetch without manual Content-Type headers
+    const response = await fetch(`http://10.209.220.75:8080/api/captions/evaluate`, {
+      method: 'POST',
+      body: formData 
+      // Note: The browser automatically handles the boundary for FormData
+    });
+
+    // 3. Handle response status
+    if (!response.ok) {
+      throw new Error(`Server responded with status: ${response.status}`);
     }
-  };
+
+    const result = await response.json();
+    setFeedback(result); // Triggers the feedback popup
+    
+  } catch (error) {
+    console.error("Transmission Interrupted", error);
+  } finally {
+    setIsSyncing(false);
+  }
+};
 
   {/*breathing logic*/}
   useEffect(() => {
@@ -155,7 +172,7 @@ const CaptionWriting = () => {
       {specialEvent === "meditation" && (
         <div className="fixed inset-0 z-100 bg-[#050505] flex flex-col items-center justify-center animate-in fade-in duration-1000">
           <div className="text-3xl text-cyan-500 font-black uppercase tracking-[0.2em]  mb-32 ">
-            Take a break
+            Congrats! Brain Rot Reduced
           </div>
           
           <div className="relative flex items-center justify-center">
@@ -265,13 +282,13 @@ const CaptionWriting = () => {
               <h1 className="text-6xl font-black italic uppercase tracking-tighter text-white">
                 Category: <span className="text-cyan-500">{selectedCtg}</span>
               </h1>
-              <div className="h-1.5 w-32 bg-cyan-500 mx-auto mt-6 rounded-full shadow-[0_0_20px_rgba(34,211,238,0.6)]"></div>
+              <div className="h-1.5 w-82 bg-cyan-500 mx-auto mt-6 rounded-full shadow-[0_0_20px_rgba(34,211,238,0.6)]"></div>
             </header>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-stretch">
               
               {/*Fetched Image Area */}
-              <div className="relative overflow-hidden flex items-center justify-center">
+              <div className="relative overflow-hidden flex items-center justify-center ">
                 {currentImg ? (
                     <img 
                       src={currentImg.url} 
@@ -284,16 +301,13 @@ const CaptionWriting = () => {
                     <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-cyan-500"></div>
                   </div>
                 )}
-                <div className="absolute bottom-6 left-6 px-4 py-2 bg-black/60 backdrop-blur-md rounded-xl border border-white/5 text-[10px] font-black uppercase text-zinc-400">
-                  IMAGE_ID: {currentImg?.id || "FETCHING..."}
-                </div>
               </div>
 
               {/* User Input*/}
               <div className="space-y-6">
-                <div className="bg-[#111]/50 backdrop-blur-2xl border border-white/5 p-10 rounded-[3rem] shadow-xl">
+                <div className="bg-[#111]/50 backdrop-blur-2xl border border-white/5 p-8 rounded-[3rem] shadow-xl">
                   <label htmlFor="caption-neural-input" 
-                    className="block text-[15px] font-black uppercase tracking-[0.3em] text-zinc-500 mb-4"
+                    className="block text-[12px] font-black uppercase tracking-[0.2em] text-zinc-500 mb-4"
                   >
                     Enter the Caption
                   </label>
@@ -303,36 +317,75 @@ const CaptionWriting = () => {
                     value={caption}
                     onChange={(e) => setCaption(e.target.value)}
                     placeholder="Compose high-impact caption here..."
-                    className="w-full bg-white/5 border border-white/10 rounded-2xl p-6 text-xl text-white placeholder:text-zinc-700 focus:outline-none focus:border-cyan-500/50 min-h-62.5 transition-all resize-none"
+                    className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-md text-white placeholder:text-zinc-700 focus:outline-none focus:border-cyan-500/50 min-h-40 transition-all resize-none"
                   />
                   
-                  <div className="flex flex-col sm:flex-row gap-4 mt-8">
+                  <div className="flex flex-col sm:flex-row gap-4 mt-6">
                     {/* Submit Button */}
                     <button onClick={handleSubmitCaption}
                       disabled={isSyncing || caption.length < 5}
-                      className="grow flex items-center justify-center gap-3 px-8 py-5 bg-white text-black rounded-2xl font-black uppercase tracking-widest hover:bg-cyan-400 transition-all active:scale-95 disabled:opacity-20"
+                      className="grow flex items-center justify-center gap-3 px-6 py-4 bg-white text-black rounded-2xl font-black uppercase tracking-widest hover:bg-cyan-400 transition-all active:scale-95 disabled:opacity-20"
                     >
-                      {isSyncing ? "Transmitting..." : "Submit Caption"}
-                      <Send size={20} />
+                      {isSyncing ? "Analysing..." : "Submit Caption"}
+                      <Send size={25} />
                     </button>
 
-                    {/* Brainrot Check Button */}
+                    {/* Aura Points Button */}
                     <button 
-                      className="px-8 py-5 bg-zinc-900 text-zinc-400 border border-white/5 rounded-2xl font-black uppercase tracking-widest hover:text-white hover:border-white/20 transition-all"
+                      onClick={() => setShowAura(true)}
+                      disabled={!feedback} 
+                      className="px-8 py-5 bg-zinc-900 text-zinc-400 border border-white/5 rounded-2xl font-black uppercase tracking-widest hover:text-black hover:bg-white hover:border-zinc-400 transition-all disabled:opacity-20"
                     >
-                      {feedback?.brainrotScore ? `Brainrot: ${feedback.brainrotScore}` : "Check Brainrot Score"}
+                      {feedback?.newBrainRotScore ? `Aura: ${feedback.newBrainRotScore}` : "Check Aura Points"}
                     </button>
                   </div>
                 </div>
 
                 {/*Feedback */}
                 {feedback && (
-                  <div className="bg-cyan-500/5 border border-cyan-500/20 p-8 rounded-[2.5rem] animate-in fade-in slide-in-from-top-2">
-                    <div className="flex justify-between items-center mb-4">
-                      <h4 className="text-cyan-500 font-black uppercase text-xs tracking-widest">Your Results</h4>
-                      <span className="text-white font-black text-2xl">Score: {feedback.score}</span>
+                  <div className=" mt-4 bg-[#0c0c0e] border border-cyan-500/30 p-6 rounded-4xl animate-in fade-in zoom-in duration-500 shadow-2xl overflow-hidden max-w-full">
+                    <div className="flex justify-between items-start mb-6 border-b border-white/5 pb-4">
+                      <div>
+                        <h4 className="text-cyan-500 font-black uppercase text-[10px] tracking-[0.2em]">Caption Analysis Completed</h4>
+                        <p className="text-zinc-500 text-[10px] uppercase font-bold">Category: {selectedCtg}</p>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <p className="text-zinc-500 text-[10px] font-black uppercase mb-1">Total Points</p>
+                        <p className="text-white font-black text-3xl tracking-tighter">{feedback.totalPoints} / <span className="text-2xs text-zinc-700">60</span></p>
+                      </div>
                     </div>
-                    <p className="text-zinc-400 italic text-sm">"{feedback.report}"</p>
+                    {/* Feedback Text */}
+                    <div className=" p-4 bg-cyan-500/5 rounded-xl border-l-4 mb-6 border-cyan-500">
+                      <p className="text-zinc-300 italic text-sm leading-snug font-medium">
+                        "{feedback.feedback}"
+                      </p>
+                    </div>
+
+                    {/* checkpoints */}
+                    <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
+                      {[
+                        { label: "Creativity", val: feedback.creativity, max: 15 },
+                        { label: "Grammar", val: feedback.grammar, max: 10 },
+                        { label: "Relevance", val: feedback.relevance, max: 15 },
+                        { label: "Syntax", val: feedback.syntax , max: 10},
+                        { label: "Vocabulary", val: feedback.vocabulary, max: 10 },
+                      ].map((stat) => (
+                        <div key={stat.label} className="bg-white/5 p-3 rounded-xl border border-white/5 flex flex-col justify-between">
+                          <p className="text-[8px] font-black uppercase text-zinc-500 tracking-widest ">{stat.label}</p>
+                            <div className="flex items-baseline gap-1 mt-1">
+                              <p className="text-lg font-black text-white">{stat.val}</p>
+                              <span className="text-[10px] font-bold text-zinc-700">/{stat.max}</span>
+                            </div>
+
+                            <div className="w-full h-1 bg-zinc-800 mt-2 rounded-full overflow-hidden">
+                              <div 
+                                className="h-full bg-cyan-500 transition-all duration-1000" 
+                                style={{ width: `${(stat.val / (typeof stat.max === 'number' ? stat.max : 100)) * 100}%` }}
+                              ></div>
+                            </div>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 )}
               </div>
@@ -341,16 +394,16 @@ const CaptionWriting = () => {
             {/*change category */}
             <button 
               onClick={() => { setSelectedCtg(null); setFeedback(null); }}
-              className="mt-16 mx-auto flex items-center gap-2 text-zinc-500 hover:text-white transition-colors uppercase font-black text-[10px] tracking-widest"
+              className="mt-16 mx-auto flex items-center gap-2 text-white hover:text-cyan-500 transition-colors uppercase font-black text-[15px] tracking-widest"
             >
-              <div className="w-8 h-px bg-zinc-800"></div>
+              <div className="w-8 h-px bg-white"></div>
               Change Category 
             </button>
           </div>}
 
           {/* back */}
 
-        <footer className="mt-24 text-center">
+        <footer className="mt-15 text-center">
           <button 
             onClick={() => navigate("/")}
             className="px-8 py-3 rounded-full border-3 border-zinc-800 text-zinc-500 hover:text-white hover:bg-blue-500 hover:border-blue-900 hover:border-3 transition-all text-sm font-bold uppercase tracking-widest"
@@ -359,6 +412,41 @@ const CaptionWriting = () => {
           </button>
         </footer>
       </div>
+
+      {showAura && feedback && (
+        <div className="fixed inset-0 z-200 flex items-center justify-center p-6 animate-in fade-in duration-300">
+          <div 
+            className="absolute inset-0 bg-black/80 backdrop-blur-md"
+            onClick={() => setShowAura(false)}
+          ></div>
+
+          {/*  aura points pop up */}
+          <div className="relative bg-[#0c0c0e] border-2 border-cyan-500/50 p-12 rounded-[3rem] text-center max-w-sm w-full shadow-[0_0_100px_rgba(34,211,238,0.2)]">
+            <h2 className="text-cyan-500 font-black uppercase text-md tracking-[0.2em] mb-8">Your Aura Points</h2>
+            
+            <div className="relative mb-8">
+              <div className="absolute inset-0 bg-cyan-500/20 blur-3xl rounded-full"></div>
+              <div className="relative text-7xl font-black italic text-white tracking-tighter">
+                {feedback.newBrainRotScore}
+                <span className="text-zinc-600 text-2xl not-italic tracking-tight ml-2">pts</span>
+              </div>
+            </div>
+
+            <p className="text-zinc-400 font-medium leading-relaxed mb-10">
+              {feedback.newBrainRotScore > 50 
+                ? "Critical brainrot detected. Immediate meditation required." 
+                : "You are a true aura farmer."}
+            </p>
+
+            <button 
+              onClick={() => setShowAura(false)}
+              className="w-full py-4 bg-cyan-500 text-black font-black uppercase tracking-widest rounded-xl hover:bg-white transition-all active:scale-95"
+            >
+              Dismiss
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
