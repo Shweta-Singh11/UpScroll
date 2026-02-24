@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import {RotateCcw, Zap } from "lucide-react";
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import {RotateCcw, Zap, ArrowLeft } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
 
 const GRID_SIZE = 10; 
@@ -17,11 +17,14 @@ const WordSearch = () => {
   const [selectionStart, setSelectionStart] = useState(null); 
   const [currentSelection, setCurrentSelection] = useState([]);
   const [gameAttempts, setGameAttempts] = useState(0);
-  const username = "Jude";
+  const [showAura, setShowAura] = useState(false);
+  const [totalAuraPoints, setTotalAuraPoints] = useState(null);
+  const syncStarted = useRef(false);
+  const username = "Julia";
   
   const fetchWords = async () => {
     try {
-      const response = await fetch("https://brain-backend-2-5onn.onrender.com/api/games/wordsearch/generate");
+      const response = await fetch("http://10.209.220.75:8080/api/games/wordsearch/generate");
       const data = await response.json(); 
       setWords(data.map(w => w.toUpperCase()));
     } catch (error) {
@@ -31,8 +34,11 @@ const WordSearch = () => {
   };
 
   const syncGameStats = async (finalWords = wordsFound, attempts = gameAttempts) => {
+    if (syncStarted.current) return; 
+  
+    syncStarted.current = true;
     try {
-      const response = await fetch(`https://brain-backend-2-5onn.onrender.com/api/games/${username}/wordsearch?wordsFound=${finalWords.length}&gameAttempts=${attempts}`, {
+      const response = await fetch(`http://10.209.220.75:8080/api/games/${username}/wordsearch?wordsFound=${finalWords.length}&gameAttempts=${attempts}`, {
         method: "POST"
       });
 
@@ -40,9 +46,11 @@ const WordSearch = () => {
       const playerData = await response.json();
       console.log("Official Player Data from Backend:", playerData);
 
-      setScore(playerData.wordSearchScore || 0);
+      setTotalAuraPoints(playerData.totalAuraPoints || 0);
+      setScore(playerData.auraGained || 0);
     } catch (error) {
       console.error("Backend Sync Error:", error);
+      syncStarted.current = false;
     }
   };
 
@@ -109,9 +117,14 @@ const WordSearch = () => {
   }, [wordsFound, words, gameState]);
 
   useEffect(() => {
-    if (gameState === 'won' || gameState === 'lost') {
+    let isSubscribed = true;
+    if ((gameState === 'won' || gameState === 'lost') && isSubscribed) {
       syncGameStats();
     }
+
+    return () => {
+      isSubscribed = false; //prevents double-calls 
+    };
   }, [gameState]);
 
 // Interaction
@@ -154,6 +167,8 @@ const WordSearch = () => {
       setGameState('max_attempts');
       return;
     }
+    syncStarted.current = false;
+
     const newAttempts = gameAttempts + 1;
     setGameAttempts(newAttempts);
     
@@ -175,6 +190,13 @@ const WordSearch = () => {
       <div className="absolute bottom-0 right-0 w-96 h-96 bg-green-500/10 rounded-full blur-[120px]"></div>
 
       <div className="max-w-6xl mx-auto relative z-10">
+        <button 
+          onClick={() => navigate("/")} 
+          className="flex items-center gap-2 text-zinc-500 hover:text-white transition-all mb-8 group"
+        >
+          <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
+          <span className="text-[10px] font-black uppercase tracking-[0.2em]">Exit</span>
+        </button>
         <header className="text-center mb-16">
           <h1 className="text-6xl font-black italic tracking-tighter uppercase leading-none mb-2">
             Word <span className="bg-linear-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent pr-4">SEARCH</span>
@@ -247,7 +269,7 @@ const WordSearch = () => {
                           "1st Attempt: Full score yield.",
                           "2nd Attempt: -5 point penalty.",
                           "3rd Attempt: -10 point penalty.",
-                          "Last attempt determines Brainrot score.",
+                          "Last attempt determines Aura Points.",
                           "Only listed words are valid data."
                         ].map((rule, i) => (
                           <li key={i} className="flex gap-3 items-start text-[10px] font-black text-zinc-400 uppercase tracking-widest leading-tight">
@@ -279,9 +301,13 @@ const WordSearch = () => {
                   <span className="text-xs font-black uppercase tracking-widest text-zinc-400 group-hover:text-white">Restart</span>
                </button>
 
-               <button onClick={() => navigate("/")} className="mt-10 px-8 py-4 bg-white text-black rounded-full flex items-center gap-3 shadow-xl hover:bg-cyan-400 transition-all active:scale-95 text-xs font-black uppercase tracking-widest">
-                  Know your Brainrot Score
-               </button>
+               <button 
+                  onClick={() => setShowAura(true)} 
+                  disabled={totalAuraPoints === null}
+                  className="mt-10 px-8 py-4 bg-white text-black rounded-full flex items-center gap-3 shadow-xl hover:bg-cyan-400 transition-all active:scale-95 text-xs font-black uppercase tracking-widest disabled:opacity-20"
+                >
+                  {totalAuraPoints !== null ? `Your Aura Score: ${totalAuraPoints}` : "Check Aura Points"}
+                </button>
             </div>
           </div>
 
@@ -301,7 +327,7 @@ const WordSearch = () => {
         </div>
       </div>
 
-      {/* Result Modals */}
+      {/* Result */}
       {(gameState === 'won' || gameState === 'lost') && (
         <div className="fixed inset-0 bg-[#050505]/90 backdrop-blur-xl flex items-center justify-center z-50 p-6">
           <div className="bg-[#111] p-12 rounded-[3rem] shadow-2xl text-center max-w-sm w-full border border-white/10">
