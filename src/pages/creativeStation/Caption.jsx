@@ -1,4 +1,5 @@
 import React, { useState,useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
 import { Send, Image as ImageIcon } from 'lucide-react';
 import meme from '../../assets/meme.png';
 import political_humour from '../../assets/political_humour.png';
@@ -24,14 +25,14 @@ const categories = [
   },
   {
     id: "nature",
-    title: "Nature & Wild",
+    title: "Natural Reset",
     desc: "Sync with the biological world. Find meaning in the organic.",
     image: nature,
   },
   {
     id: "art-history",
-    title: "Art & History",
-    desc: "Bridge the gap between eras. Decode historical aesthetics.",
+    title: "Artful History",
+    desc: "Analyze the masterpieces of art and the heavy weight of hisory.",
     image: art_history,
   },
   {
@@ -41,14 +42,14 @@ const categories = [
     image: spiritual,
   },
   {
-    id: "tragedies",
-    title: "Everyday Tragedies",
-    desc: "Perspective training. Find the creative silver lining in chaos.",
+    id: "reality",
+    title: "Bittersweet Reality",
+    desc: "Find the resilience and irony within the unpolished truths of life.",
     image: tragedies,
   },
   {
-    id: "sexual",
-    title: "Adults Only",
+    id: "adult",
+    title: "Explicit Content",
     desc: "Dive into spicy humor.Mature content ahead. Click responsibly.",
     image: adult,
   },
@@ -61,6 +62,7 @@ const categories = [
 ];
 
 const CaptionWriting = () => {
+  const navigate=useNavigate();
   const [selectedId, setSelectedId] = useState(null);
   const [selectedCtg, setSelectedCtg] = useState(null);
   const [caption, setCaption] = useState("");
@@ -70,36 +72,46 @@ const CaptionWriting = () => {
   const [specialEvent, setSpecialEvent] = useState(null);
   const [phase, setPhase] = useState("Inhale");
   const [showAura, setShowAura] = useState(false);
-  const username = "Jude";
+  const username = "James";
 
   const handleFetchImg = async (activity) => {
     setSpecialEvent(null);
+    setFeedback(null);
+    setCaption("");
 
-    if (activity.id === "spiritual") {
-      setSpecialEvent("meditation");
-      setFeedback({ 
-        score: -10, 
-        report: "Neural cooldown initiated. Your brainrot levels are receding." 
-      });
+    if (activity.id === "spiritual" || activity.id === "adult") {
+      const eventType = activity.id === "spiritual" ? "meditation" : "caught";
+      setSpecialEvent(eventType);
+      
+      try {
+        const formData = new FormData();
+        formData.append("category", activity.title); 
+        formData.append("imageUrl", "");
+        formData.append("caption", "");  
+        formData.append("username", username);
+
+        const response = await fetch(`http://10.209.220.75:8080/api/captions/evaluate`, {
+          method: 'POST',
+          body: formData
+        });
+
+        if (response.ok) {
+          const result = await response.json();
+          // Backend now returns auraGained and totalAuraPoints
+          setFeedback(result); 
+        }
+      } catch (error) {
+        console.error("Backend Failed", error);
+      }
       return;
     }
 
-    if (activity.id === "sexual") {
-      setSpecialEvent("caught");
-      setFeedback({ 
-        score: 10, 
-        report: "Focus lost. You're caught red handed." 
-      });
-      return;
-    }
     setSelectedId(activity.id);
     setSelectedCtg(activity.title);
     try {
-    // Send category ID and username to backend
+    // Send category and username to backend
       const response = await fetch(`http://10.209.220.75:8080/api/captions/image?category=${activity.title}`, {
       method: 'GET'
-      // headers: { 'Content-Type': 'application/json' },
-      // body: JSON.stringify({ categoryId: activity.id, username }) //
     });
       const data = await response.json();
       setCurrentImg({ id: data.imageId, url: data.imageUrl });
@@ -110,7 +122,6 @@ const CaptionWriting = () => {
   };
 
   const handleSubmitCaption = async () => {
-  // Safety check to ensure an image exists before sending
   if (!currentImg || !currentImg.url) {
     console.error("No image found to submit");
     return;
@@ -118,28 +129,25 @@ const CaptionWriting = () => {
 
   setIsSyncing(true);
   try {
-    // 1. Initialize FormData for HTML Form submission
+    // FormData for HTML Form submission
     const formData = new FormData();
-    formData.append("category", selectedCtg); // Sending the category title
+    formData.append("category", selectedCtg); 
     formData.append("imageUrl", currentImg.url);
     formData.append("caption", caption);
-    formData.append("username", username); // Including "Jude" as required by the backend
+    formData.append("username", username);
 
-    // 2. Execute the fetch without manual Content-Type headers
     const response = await fetch(`http://10.209.220.75:8080/api/captions/evaluate`, {
       method: 'POST',
       body: formData 
-      // Note: The browser automatically handles the boundary for FormData
+      
     });
 
-    // 3. Handle response status
     if (!response.ok) {
       throw new Error(`Server responded with status: ${response.status}`);
     }
 
     const result = await response.json();
-    setFeedback(result); // Triggers the feedback popup
-    
+    setFeedback(result); 
   } catch (error) {
     console.error("Transmission Interrupted", error);
   } finally {
@@ -168,22 +176,26 @@ const CaptionWriting = () => {
 
   return (
     <div className="min-h-screen pt-24 pb-12 px-6 bg-linear-to-r from-[#0d1322] to-[#1a284a] text-white">
+      
       {/* meditation */}
       {specialEvent === "meditation" && (
         <div className="fixed inset-0 z-100 bg-[#050505] flex flex-col items-center justify-center animate-in fade-in duration-1000">
-          <div className="text-3xl text-cyan-500 font-black uppercase tracking-[0.2em]  mb-32 ">
-            Congrats! Brain Rot Reduced
+          <div className="text-center mb-12">
+            <h2 className="text-3xl text-cyan-500 font-black uppercase tracking-[0.2em]">Congrats! Brain Rot Reduced</h2>
+            <div className="mt-4 text-2xl text-white font-mono">
+              Current Aura Points: {feedback?.totalAuraPoints || "Loading"}
+            </div>
           </div>
-          
+
           <div className="relative flex items-center justify-center">
-            <div className="absolute w-80 h-80 bg-cyan-500/5 rounded-full blur-3xl animate-breath-slow"></div>
+            {/* Outer Glow */}
+            <div className={`absolute w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl transition-all duration-4000 ${phase === "Breathe In" ? "scale-150 opacity-100" : "scale-100 opacity-50"}`}></div>
             
-            <div className="w-48 h-48 bg-linear-to-br from-cyan-400 to-blue-600 rounded-full flex flex-col items-center justify-center shadow-[0_0_80px_rgba(34,211,238,0.3)] animate-breath-slow">
-              
-              <span className="text-black font-black uppercase text-xs tracking-widest transition-all duration-1000">
+            {/* Breathing Circle */}
+            <div className={`w-48 h-48 bg-linear-to-br from-cyan-400 to-blue-600 rounded-full flex items-center justify-center shadow-[0_0_80px_rgba(34,211,238,0.3)] transition-all duration-4000 ease-in-out ${phase === "Breathe In" ? "scale-125" : "scale-90"}`}>
+              <span className="text-black font-black uppercase text-xs tracking-widest">
                 {phase}
               </span>
-              <div className="w-8 h-px bg-black/20 my-2"></div>
             </div>
           </div>
 
@@ -204,38 +216,36 @@ const CaptionWriting = () => {
 
           <button 
             onClick={() => { setSpecialEvent(null); setPhase("Inhale"); }}
-            className="mt-20 px-12 py-4 border border-white/5 rounded-full text-[12px] font-black uppercase tracking-[0.3em] text-zinc-500 hover:text-white hover:border-white/20  hover:bg-blue-600 transition-all active:scale-95"
+            className="mt-20 px-12 py-4 border border-white/5 rounded-full text-[12px] font-black uppercase tracking-[0.3em] text-zinc-500 hover:text-white hover:bg-cyan-600 transition-all"
           >
-            Exit
+            Claim & Exit
           </button>
         </div>
       )}
-      {/* sexual */}
+      {/* adult only */}
       {specialEvent === "caught" && (
         <div className="fixed inset-0 z-50 bg-red-600/20 backdrop-blur-md flex flex-col items-center justify-center p-6 animate-flash-red">
           <div className="bg-black p-12 rounded-[3rem] border-4 border-red-600 shadow-[0_0_100px_rgba(220,38,38,0.5)] text-center">
-            <h2 className="text-7xl font-black italic uppercase text-red-600 mb-4 animate-bounce">
-              CAUGHT!
-            </h2>
-            <p className="text-white font-black uppercase tracking-widest mb-8">
-              Focus lost. You're caught red handed.
-            </p>
-            <div className="text-4xl text-white font-mono mb-8">+10 BRAINROT</div>
-            
-            <button 
-              onClick={() => setSpecialEvent(null)}
-              className="px-12 py-5 bg-red-600 text-white rounded-2xl font-black uppercase tracking-widest hover:bg-red-700 transition-all"
-            >
-              Surrender
-            </button>
+            <h2 className="text-7xl font-black italic uppercase text-red-600 mb-4 animate-bounce">CAUGHT!</h2>
+            <p className="text-white font-black uppercase tracking-widest mb-8">Caught in 4K. -50 Aura Points</p>
+            <div className="mt-4 text-2xl text-white font-mono">
+              Current Aura Points: {feedback?.totalAuraPoints || "Loading"}
+            </div>
+              <button 
+                onClick={() => setSpecialEvent(null)}
+                className="px-12 py-5 bg-red-600 text-white rounded-2xl font-black uppercase tracking-widest hover:bg-red-700 transition-all shadow-[0_0_30px_rgba(220,38,38,0.4)]"
+              >
+                Surrender
+              </button>
+            </div>
           </div>
-        </div>
+        
       )}
 
       <div className="max-w-7xl mx-auto">
         {!selectedCtg ? (
           <div className="w-full max-w-400 mx-auto animate-in fade-in slide-in-from-bottom-4">
-            <h1 className="text-6xl md:text-8xl font-black uppercase italic text-center tracking-tighter leading-[0.8] mb-4">
+            <h1 className="text-6xl md:text-7xl font-black uppercase italic text-center tracking-tighter leading-[0.8] mb-4">
                 Caption <span className="bg-linear-to-r from-violet-400 to-cyan-400 bg-clip-text text-transparent pr-4">writing</span>
               </h1>
             <header className="text-center mb-16 mt-8">
@@ -327,7 +337,7 @@ const CaptionWriting = () => {
                       className="grow flex items-center justify-center gap-3 px-6 py-4 bg-white text-black rounded-2xl font-black uppercase tracking-widest hover:bg-cyan-400 transition-all active:scale-95 disabled:opacity-20"
                     >
                       {isSyncing ? "Analysing..." : "Submit Caption"}
-                      <Send size={25} />
+                      <Send size={20} />
                     </button>
 
                     {/* Aura Points Button */}
@@ -336,14 +346,14 @@ const CaptionWriting = () => {
                       disabled={!feedback} 
                       className="px-8 py-5 bg-zinc-900 text-zinc-400 border border-white/5 rounded-2xl font-black uppercase tracking-widest hover:text-black hover:bg-white hover:border-zinc-400 transition-all disabled:opacity-20"
                     >
-                      {feedback?.newBrainRotScore ? `Aura: ${feedback.newBrainRotScore}` : "Check Aura Points"}
+                      {feedback?.totalAuraPoints ? `Total Aura Ponts: ${feedback.totalAuraPoints}` : "Check Aura Points"}
                     </button>
                   </div>
                 </div>
 
                 {/*Feedback */}
                 {feedback && (
-                  <div className=" mt-4 bg-[#0c0c0e] border border-cyan-500/30 p-6 rounded-4xl animate-in fade-in zoom-in duration-500 shadow-2xl overflow-hidden max-w-full">
+                  <div className=" mt-4 bg-[#0c0c0e] border border-cyan-500/30 p-4 rounded-4xl animate-in fade-in zoom-in duration-500 shadow-2xl overflow-hidden max-w-full">
                     <div className="flex justify-between items-start mb-6 border-b border-white/5 pb-4">
                       <div>
                         <h4 className="text-cyan-500 font-black uppercase text-[10px] tracking-[0.2em]">Caption Analysis Completed</h4>
@@ -351,7 +361,7 @@ const CaptionWriting = () => {
                       </div>
                       <div className="flex items-center gap-2">
                         <p className="text-zinc-500 text-[10px] font-black uppercase mb-1">Total Points</p>
-                        <p className="text-white font-black text-3xl tracking-tighter">{feedback.totalPoints} / <span className="text-2xs text-zinc-700">60</span></p>
+                        <p className="text-white font-black text-3xl tracking-tighter">{feedback.auraGained} / <span className="text-2xs text-zinc-700">60</span></p>
                       </div>
                     </div>
                     {/* Feedback Text */}
@@ -362,15 +372,17 @@ const CaptionWriting = () => {
                     </div>
 
                     {/* checkpoints */}
-                    <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
                       {[
                         { label: "Creativity", val: feedback.creativity, max: 15 },
                         { label: "Grammar", val: feedback.grammar, max: 10 },
                         { label: "Relevance", val: feedback.relevance, max: 15 },
                         { label: "Syntax", val: feedback.syntax , max: 10},
                         { label: "Vocabulary", val: feedback.vocabulary, max: 10 },
-                      ].map((stat) => (
-                        <div key={stat.label} className="bg-white/5 p-3 rounded-xl border border-white/5 flex flex-col justify-between">
+                      ].map((stat,index) => (
+                        <div key={stat.label} style={{ animationDelay: `${index * 100}ms` }}
+                          className={`bg-white/5 p-3 rounded-xl border border-white/5 flex flex-col justify-between animate-in fade-in slide-in-from-bottom-2 duration-500 fill-mode-both
+                            ${index === 4 ? "col-span-2 md:col-span-1" : "col-span-1"}`}>
                           <p className="text-[8px] font-black uppercase text-zinc-500 tracking-widest ">{stat.label}</p>
                             <div className="flex items-baseline gap-1 mt-1">
                               <p className="text-lg font-black text-white">{stat.val}</p>
@@ -427,13 +439,13 @@ const CaptionWriting = () => {
             <div className="relative mb-8">
               <div className="absolute inset-0 bg-cyan-500/20 blur-3xl rounded-full"></div>
               <div className="relative text-7xl font-black italic text-white tracking-tighter">
-                {feedback.newBrainRotScore}
+                {feedback.totalAuraPoints}
                 <span className="text-zinc-600 text-2xl not-italic tracking-tight ml-2">pts</span>
               </div>
             </div>
 
             <p className="text-zinc-400 font-medium leading-relaxed mb-10">
-              {feedback.newBrainRotScore > 50 
+              {feedback.totalAuraPoints > 50 
                 ? "Critical brainrot detected. Immediate meditation required." 
                 : "You are a true aura farmer."}
             </p>

@@ -3,14 +3,14 @@ import { Link } from 'react-router-dom';
 
 const SignUp = () => {
   return (
-    <div className="min-h-[80vh] flex items-center justify-center px-4 bg-white dark:bg-black">
-      <div className="max-w-md w-full space-y-8 p-10 border-2 border-black dark:border-white shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] dark:shadow-[8px_8px_0px_0px_rgba(255,255,255,1)]">
+    <div className="min-h-[80vh] flex items-center justify-center px-4 bg-[#141532] ">
+      <div className="max-w-md w-full space-y-4 mt-18 mb-4 p-10 rounded-2xl border-2 bg-white border-black">
         <div className="text-center">
-          <h2 className="text-4xl font-black italic tracking-tighter uppercase">login karo bhai !!</h2>
+          <h2 className="text-4xl font-black text-black italic tracking-tighter uppercase">login karo bhai !!</h2>
           <p className="mt-2 text-zinc-500 font-medium">Create an account to track your focus journey.</p>
         </div>
         
-        <form className="mt-8 space-y-4">
+        <form className="mt-8 space-y-4 text-black">
           <input 
             type="text" 
             placeholder="NAME" 
@@ -27,13 +27,14 @@ const SignUp = () => {
             className="w-full px-4 py-3 border-2 border-zinc-200 focus:border-black outline-none transition-all font-bold uppercase placeholder:text-zinc-300"
           />
           
-          <button className="w-full bg-black text-white dark:bg-white dark:text-black py-4 font-black uppercase tracking-widest hover:invert transition-all mt-4">
+          <button className="w-full bg-black text-white border border-black py-4 
+            font-black uppercase tracking-widest hover:bg-white hover:text-black hover:border-black transition-all duration-300 mt-4">
             Begin Journey
           </button>
         </form>
 
         <p className="text-center text-xs font-bold text-zinc-400 uppercase tracking-widest">
-          Already a member? <Link to="/login" className="text-black dark:text-white underline">Sign In</Link>
+          Already a member? <Link to="/login" className="text-black  underline">Sign In</Link>
         </p>
       </div>
     </div>

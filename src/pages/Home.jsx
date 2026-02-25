@@ -1,7 +1,34 @@
-import React from 'react';
+import React,{useEffect,useState} from 'react';
 import { useNavigate } from "react-router-dom";
-import { Sparkles, Brain, SquarePen, Zap } from "lucide-react";
+import { Sparkles, Brain, SquarePen,ChevronDown } from "lucide-react";
 import ActivityCard from '../components/ui/Activities'; 
+import banner2 from "../assets/banner2.jpg";
+
+const FAQItem = ({ question, answer }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <div className="border-b border-white/5 last:border-0">
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full py-4 flex justify-between items-center text-left focus:outline-none group"
+      >
+        <span className={`text-lg font-semibold transition-colors duration-300 ${isOpen ? 'text-cyan-400' : 'text-zinc-100 group-hover:text-cyan-300'}`}>
+          {question}
+        </span>
+        <ChevronDown 
+          className={`transform transition-transform duration-300 ${isOpen ? 'rotate-180 text-cyan-400' : 'text-zinc-500'}`} 
+          size={24} 
+        />
+      </button>
+      <div className={`overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? 'max-h-96 pb-6' : 'max-h-0'}`}>
+        <p className="text-zinc-400 leading-relaxed italic border-l-2 border-cyan-500/50 pl-4">
+          {answer}
+        </p>
+      </div>
+    </div>
+  );
+};
 
 const Home = () => {
   const navigate=useNavigate();
@@ -27,89 +54,170 @@ const Home = () => {
       bgColor: "from-emerald-400 to-teal-600",
       path: "/activities/creative",
       icon: <SquarePen size={32} />
-
     }
   ];
 
-  return (
-    <div className="min-h-screen w-full pt-28 pb-20 px-6 relative overflow-hidden bg-[#0a0a0c]">
-      
-      <div className="absolute top-0 right-0 w-125 h-125 bg-blue-500/10 rounded-full blur-[120px]"></div>
-      <div className="absolute bottom-0 left-0 w-100 h-100 bg-indigo-500/10 rounded-full blur-[100px]"></div>
+  const faqs = [
+    {
+      question: "What exactly is UpScroll?",
+      answer: "UpScroll is a digital sanctuary designed to help you break free from the infinite scroll. It's a platform built on clarity and intent."
+    },
+    {
+      question: "How does it differ from traditional platforms?",
+      answer: "While most platforms harvest attention through noise, UpScroll prioritizes your time and focus."
+    },
+    {
+      question: "What are Aura Points?",
+      answer: "Aura Points are a measure of your digital intentionality and focus within UpScroll. Unlike traditional platforms that reward mindless consumption, your 'Aura' grows when you engage deeply with cognitive modules, solve complex logic puzzles, and prioritize quality interactions over quantity."
+    },
+    {
+      question: "How do I earn Aura Points?",
+      answer: "You earn Aura by 'scrolling up'—choosing activities that challenge your mind. Whether it's training your memory in Logic modules or mastering technical environments, your Aura reflects the discipline and consistency you bring to the platform."
+    },
+    {
+      question: "Who are the architects behind the project?",
+      answer: "UpScroll was founded by Shweta Singh, our Interface Alchemist, and Tusharika Srivastava, our Backend Architect."
+    }
+  ];
 
-      <div className="max-w-7xl mx-auto relative z-10">
-        {/* Main Section */}
-        <header className="mb-20 space-y-6">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-cyan-400 text-xs font-black uppercase tracking-widest">
-            <Zap size={14} fill="currentColor" />
-            <span>Welcome Back</span>
+  const [scrollProgress, setScrollProgress] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const progress = window.scrollY / window.innerHeight;
+      setScrollProgress(progress);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const scale = 1 + scrollProgress * 0.5; 
+  const rotateX = Math.min(scrollProgress * 25, 20); 
+  const rotateY = Math.max(15 - scrollProgress * 30, 0);
+  const translateZ = scrollProgress * 100; 
+
+  return (
+    <div className="min-h-screen  bg-linear-to-b from-[#0b0b0b] via-[#080a11] to-[#142142]">
+      
+      {/* HERO SECTION */}
+      <section className="relative h-screen flex items-center justify-center overflow-hidden bg-[#050505] ">
+        <div className="absolute bottom-0 left-0 w-full h-40 bg-linear-to-b from-transparent to-[#050505] pointer-events-none"></div>
+
+        {/* Subtle Parallax Background */}
+          <div
+            className="absolute inset-0 z-0 transition-transform duration-300 ease-out"
+            style={{
+              transform: `scale(${1 + scrollProgress * 0.15})`,
+              opacity: 100 - scrollProgress * 0.6
+            }}
+          >
+            <img
+              src={banner2}
+              className="w-full h-full object-cover brightness-[0.8] contrast-100"
+              alt="Background"
+            />
+            <div className="absolute inset-0 bg-linear-to-b from-black/40 via-black/60 to-[#050505]" />
           </div>
-          
-          <h1 className="text-6xl sm:text-7xl md:text-8xl font-black uppercase italic tracking-tighter leading-none ">
-            <span className="text-white block">DOOM</span>
-            <span className="bg-linear-to-r from-cyan-400 to-blue-600 bg-clip-text text-transparent pr-4">
-              DASHBOARD
-            </span>
-          </h1>
-          
-          <p className="text-zinc-500 text-xl font-medium max-w-xl leading-relaxed">
-            Hey! <span className="text-white font-bold">{username}</span>. 
+
+          {/* Glow Effect */}
+          <div className="absolute w-150 h-150 bg-blue-600/10 rounded-full blur-[120px] z-0"></div>
+
+          {/* Hero Content */}
+          <div
+            className="relative z-10 text-center px-6 transition-all duration-500"
+            style={{
+              transform: `translateY(${scrollProgress * -100}px)`,
+              opacity: 1 - scrollProgress * 0.8
+            }}
+          >
+            <h1 className="font-black uppercase tracking-tight text-white leading-tight ">
+              <span className="text-5xl md:text-7xl block bg-linear-to-r from-cyan-400 to-blue-600 bg-clip-text text-transparent">
+                UpScroll
+              </span>
+            </h1>
+
+            <p className="mt-6 text-zinc-400 text-lg max-w-2xl mx-auto">
+              Break the Scroll. Reclaim Your Focus.
+            </p>
+
+            <div className="mt-10 flex justify-center gap-6">
+              <button
+                onClick={() => navigate("/signup")}
+                className="px-8 py-3 rounded-full bg-white text-black font-bold uppercase tracking-widest 
+                hover:bg-blue-500 hover:text-white transition-all duration-300 
+                shadow-[0_0_40px_rgba(255,255,255,0.15)] hover:shadow-blue-500/40"
+              >
+                Start Now
+              </button>
+            </div>
+          </div>
+        </section>
+        <div className="absolute bottom-0 left-0 w-full h-40 bg-linear-to-t from-black via-black/80 to-transparent sblur-2xl opacity-80 pointer-events-none" />
+
+      {/* activities */}
+      <div className="max-w-7xl mx-auto px-6 py-20 relative z-10">
+        <header className="mb-20 space-y-6">
+          <p className="text-zinc-500  text-xl font-medium max-w-xl">
+            Welcome! <span className="text-blue-500 font-bold">{username}</span>. 
             Select an activity to proceed.
           </p>
         </header>
 
         {/* Activity Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 items-center">
           {activities.map((activity, index) => (
             <div 
               key={index}
               onClick={() => navigate(activity.path)}
-              className="group relative cursor-pointer"
+              className={`group relative cursor-pointer transition-all duration-500 hover:-translate-y-4 
+                ${index === 1 ? 'md:scale-110 z-20' : 'md:scale-95'}`}
             >
-              {/*Card */}
-              <div className="h-full p-10 rounded-[3rem] bg-[#16161a] border border-white/5 
-                              shadow-2xl transition-all duration-500 
-                              hover:bg-white/3 hover:border-white/20 hover:-translate-y-2">
+              <div className="h-full p-8 rounded-[2.5rem] bg-white/5 backdrop-blur-xl border border-white/10 
+                              shadow-[0_20px_50px_rgba(0,0,0,0.3)] 
+                              group-hover:border-white/20 transition-all">
                 
-                {/* Icon */}
-                <div className={`w-20 h-20 mb-8 rounded-3xl flex items-center justify-center bg-linear-to-br ${activity.bgColor} 
-                                text-white shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-500`}>
+                <div className={`w-16 h-16 mb-6 rounded-2xl flex items-center justify-center bg-linear-to-br ${activity.bgColor} 
+                                text-white shadow-lg group-hover:scale-110 transition-transform duration-500`}>
                   {activity.icon}
                 </div>
 
-                <h2 className="text-3xl font-black text-white mb-4 uppercase italic tracking-tight">
+                <h3 className="text-2xl font-black text-white mb-3 uppercase italic tracking-tight">
                   {activity.title}
-                </h2>
-                <p className="text-zinc-500 text-base leading-relaxed mb-10 group-hover:text-zinc-300 transition-colors">
+                </h3>
+                <p className="text-zinc-400 text-sm leading-relaxed mb-8">
                   {activity.description}
                 </p>
 
-                {/* Status */}
                 <div className="w-full h-1 bg-white/5 rounded-full overflow-hidden">
                   <div className={`h-full w-1/3 bg-linear-to-r ${activity.bgColor} group-hover:w-full transition-all duration-1000`}></div>
                 </div>
-                <div className="mt-4 flex justify-between text-[10px] font-black uppercase tracking-widest text-zinc-600 group-hover:text-zinc-400 transition-colors">
-                  <span>Status: Ready</span>
-                  <span>v1.0.0</span>
-                </div>
               </div>
-
-              
-              <div className={`absolute inset-0 -z-10 bg-linear-to-br ${activity.bgColor} opacity-0 group-hover:opacity-10 blur-3xl transition-opacity duration-500 rounded-[3rem]`}></div>
+              <div className={`absolute inset-0 -z-10 bg-linear-to-br ${activity.bgColor} opacity-0 group-hover:opacity-20 blur-3xl transition-opacity duration-500 rounded-[2.5rem]`}></div>
             </div>
           ))}
         </div>
-
-        {/* 4. Bottom Brainrot Section Anchor
-        <div id="brainrot-calc" className="mt-32 p-1 border-t border-white/5">
-           {/* You can add your Brainrot Calculator logic here later */}
-           {/* <div className="pt-20 text-center">
-             <h2 className="text-3xl font-black text-white uppercase italic mb-2">Neural Analysis</h2>
-             <p className="text-zinc-500 text-sm uppercase tracking-widest font-bold">Calculation Module Coming Soon</p>
-           </div>
-        </div>  */}
       </div>
+
+      {/* faq's */}
+      <section className="pt-20 pb-10 px-6 ">
+        <div className="max-w-4xl mx-auto ">
+          <div className="text-center mb-10 ">
+            
+            <h1 className="text-4xl md:text-5xl font-black tracking-tighter bg-linear-to-r from-indigo-600 to-cyan-500 bg-clip-text text-transparent uppercase italic">
+              Frequently Asked Questions
+            </h1>
+          </div>
+
+          <div className=" text-zinc-300 bg-white/5 backdrop-blur-xl border border-white/10 
+                              shadow-[0_20px_50px_rgba(0,0,0,0.3)] rounded-3xl p-8 md:p-12  ">
+            {faqs.map((faq, index) => (
+              <FAQItem key={index} question={faq.question} answer={faq.answer} />
+            ))}
+          </div>
+        </div>
+      </section>
     </div>
   );
 };
+
 export default Home;

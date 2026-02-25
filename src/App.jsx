@@ -14,28 +14,16 @@ import StoryWriting from './pages/creativeStation/Story';
 import Journal from './pages/creativeStation/Journaling';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
+import OurStory from './pages/OurStory';
+import OurTeam from './pages/OurTeam';
 
 function App() {
- 
-  const [darkMode, setDarkMode] = useState(true);
-
-  const toggleDarkMode = () => setDarkMode(!darkMode);
-
-  useEffect(() => {
-    if (darkMode) {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-  }, [darkMode]);
 
   return (
     <Router>
       
-      <div className="min-h-screen w-full bg-white dark:bg-black text-black dark:text-white transition-colors duration-300">
-        
-        <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
-        
+      <div className="min-h-screen w-full bg-[#050505] text-white selection:bg-blue-500/30">
+        <Navbar/>
         <main className="w-full ">
           <Routes>
             <Route path="/" element={<Home />} /> 
@@ -50,6 +38,8 @@ function App() {
             <Route path="/activities/creative/caption" element={<CaptionWriting />} />
             <Route path="/activities/creative/story" element={<StoryWriting/>} />
             <Route path="/activities/creative/journal" element={<Journal/>} />
+            <Route path="/StorySection" element={<OurStory />} />
+            <Route path="/TeamSection" element={<OurTeam />} />
           </Routes>
         </main>
 
