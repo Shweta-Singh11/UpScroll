@@ -1,16 +1,16 @@
-import React from 'react';
-const StoryWriting=()=>{
-    return (
+import React from "react";
+const StoryWriting = () => {
+  return (
     <div className="min-h-[80vh] pt-32 px-6 flex flex-col items-center">
       <h1 className="text-5xl font-black uppercase italic tracking-tighter mb-4">
         Finish the Story
       </h1>
       <p className="text-xl text-zinc-500 font-medium mb-12">
-        A placeholder for your memory card game.
+        A placeholder for your Finish the Story.
       </p>
-      
+
       <div className="p-20 border-4 border-dashed border-zinc-300 rounded-3xl text-zinc-400 font-bold uppercase">
-        Game Logic Coming Soon
+        Coming Soon
       </div>
     </div>
   );

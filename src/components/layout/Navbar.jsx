@@ -1,10 +1,10 @@
-import React, {useState,useEffect} from 'react';
-import { Link } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { Menu, X } from "lucide-react";
 
 const Navbar = () => {
-  const [isMenuOpen, setIsMenuOpen]=useState(false);
-  const [scrolled, setScrolled]=useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -20,7 +20,7 @@ const Navbar = () => {
       className={`fixed top-0 left-0 w-full z-50 flex justify-between items-center px-8 lg:px-16 transition-all duration-500
       ${
         scrolled
-          ? "py-3 bg-black/60 backdrop-blur-xl shadow-[0_4px_30px_rgba(0,0,0,0.6)]"
+          ? "py-4 bg-black/60 backdrop-blur-xl shadow-[0_4px_30px_rgba(0,0,0,0.6)]"
           : "py-6 bg-transparent"
       }`}
     >
@@ -33,6 +33,7 @@ const Navbar = () => {
           UpScroll
         </Link>
 
+        {/* avtivities link */}
         <div className="hidden lg:flex gap-7">
           {[
             { name: "Memory & Logic", path: "/activities/logic" },
@@ -59,13 +60,15 @@ const Navbar = () => {
         </Link>
 
         <Link to="/signup">
-          <button className="px-6 py-2 bg-white text-black text-[11px] font-black uppercase tracking-widest rounded-full 
-          hover:bg-blue-500 hover:text-white transition-all duration-300 shadow-[0_0_25px_rgba(255,255,255,0.15)] hover:shadow-blue-500/40">
+          <button
+            className="px-6 py-2 bg-white text-black text-[11px] font-black uppercase tracking-widest rounded-full 
+          hover:bg-blue-500 hover:text-white transition-all duration-300 shadow-[0_0_25px_rgba(255,255,255,0.15)] hover:shadow-blue-500/40"
+          >
             Join Now
           </button>
         </Link>
 
-        {/* Mobile Toggle */}
+        {/* Hamburger */}
         <button
           onClick={() => setIsMenuOpen(!isMenuOpen)}
           className="lg:hidden text-white"
@@ -74,7 +77,7 @@ const Navbar = () => {
         </button>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Hamburger Menu */}
       <div
         className={`absolute top-full left-0 w-full bg-black/90 backdrop-blur-xl border-t border-white/10 
         flex flex-col gap-6 px-8 py-8 lg:hidden transition-all duration-500
@@ -84,13 +87,25 @@ const Navbar = () => {
             : "opacity-0 -translate-y-5 pointer-events-none"
         }`}
       >
-        <Link to="/activities/logic" onClick={() => setIsMenuOpen(false)} className="text-lg font-bold text-white">
+        <Link
+          to="/activities/logic"
+          onClick={() => setIsMenuOpen(false)}
+          className="text-lg font-bold text-white"
+        >
           Memory & Logic
         </Link>
-        <Link to="/activities/fact-station" onClick={() => setIsMenuOpen(false)} className="text-lg font-bold text-white">
+        <Link
+          to="/activities/fact-station"
+          onClick={() => setIsMenuOpen(false)}
+          className="text-lg font-bold text-white"
+        >
           Facts Station
         </Link>
-        <Link to="/activities/creative" onClick={() => setIsMenuOpen(false)} className="text-lg font-bold text-white">
+        <Link
+          to="/activities/creative"
+          onClick={() => setIsMenuOpen(false)}
+          className="text-lg font-bold text-white"
+        >
           Creative Thinking
         </Link>
       </div>

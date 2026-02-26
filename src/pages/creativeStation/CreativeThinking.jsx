@@ -1,31 +1,31 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { PenTool, BookOpen, MessageSquare,Zap } from 'lucide-react';
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import { PenTool, BookOpen, MessageSquare, Zap } from "lucide-react";
 
 const CreativeThinking = () => {
   const navigate = useNavigate();
-  const modules=[
-    { 
-      title: 'Caption Writing', 
-      icon: <MessageSquare size={32} />, 
-      desc: 'Sharpen your wit by creating high-impact captions for diverse imagery.',
-      bgColor: "from-blue-400 to-indigo-600", 
-      path: '/activities/creative/caption'
+  const modules = [
+    {
+      title: "Caption Writing",
+      icon: <MessageSquare size={32} />,
+      desc: "Sharpen your wit by creating high-impact captions for diverse imagery.",
+      bgColor: "from-blue-400 to-indigo-600",
+      path: "/activities/creative/caption",
     },
-    { 
-      title: 'Finish the Story', 
-      icon: <BookOpen size={32} />, 
-      desc: 'We give you the spark; you build the flame. Complete the narrative arc.',
+    {
+      title: "Finish the Story",
+      icon: <BookOpen size={32} />,
+      desc: "We give you the spark; you build the flame. Complete the narrative arc.",
       bgColor: "from-fuchsia-500 to-rose-500",
-      path: '/activities/creative/story'
+      path: "/activities/creative/story",
     },
-    { 
-      title: 'Journaling', 
-      icon: <PenTool size={32} />, 
-      desc: 'Digital detox through deep reflection and structured thought dumping.',
+    {
+      title: "Journaling",
+      icon: <PenTool size={32} />,
+      desc: "Digital detox through deep reflection and structured thought dumping.",
       bgColor: "from-cyan-400 to-blue-500",
-      path: '/activities/creative/journal'
-    }
+      path: "/activities/creative/journal",
+    },
   ];
 
   return (
@@ -47,19 +47,22 @@ const CreativeThinking = () => {
         </header>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 items-center">
-          {modules.map((module,index) => (
-            <div 
-              key={index} 
+          {modules.map((module, index) => (
+            <div
+              key={index}
               onClick={() => navigate(module.path)}
               className={`group relative cursor-pointer transition-all duration-500 hover:-translate-y-4 
-                ${index === 1 ? 'md:scale-110 z-20' : 'md:scale-95'}`}
+                ${index === 1 ? "md:scale-110 z-20" : "md:scale-95"}`}
             >
-              <div className="h-full p-8 rounded-[2.5rem] bg-white/5 backdrop-blur-xl border border-white/10 
+              <div
+                className="h-full p-8 rounded-[2.5rem] bg-white/5 backdrop-blur-xl border border-white/10 
                               shadow-[0_20px_50px_rgba(0,0,0,0.3)] group-hover:shadow-[0_20px_50px_rgba(139,92,246,0.3)]
-                              group-hover:border-white/20 transition-all">
-                
-                <div className={`w-16 h-16 mb-6 rounded-2xl flex items-center justify-center bg-linear-to-br ${module.bgColor} 
-                                text-white shadow-lg group-hover:scale-110 transition-transform duration-500`}>
+                              group-hover:border-white/20 transition-all"
+              >
+                <div
+                  className={`w-16 h-16 mb-6 rounded-2xl flex items-center justify-center bg-linear-to-br ${module.bgColor} 
+                                text-white shadow-lg group-hover:scale-110 transition-transform duration-500`}
+                >
                   {module.icon}
                 </div>
 
@@ -71,18 +74,20 @@ const CreativeThinking = () => {
                 </p>
 
                 <div className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.2em] text-cyan-400 group-hover:text-white transition-colors">
-                  <span>Begin Quest</span>
+                  <span>Unleash Creativity</span>
                   <Zap size={14} className="group-hover:fill-current" />
                 </div>
               </div>
 
-              <div className={`absolute inset-0 -z-10 bg-linear-to-br ${module.bgColor} opacity-0 group-hover:opacity-20 blur-3xl transition-opacity duration-500 rounded-[2.5rem]`}></div>
+              <div
+                className={`absolute inset-0 -z-10 bg-linear-to-br ${module.bgColor} opacity-0 group-hover:opacity-20 blur-3xl transition-opacity duration-500 rounded-[2.5rem]`}
+              ></div>
             </div>
           ))}
         </div>
 
         <footer className="mt-24 text-center">
-          <button 
+          <button
             onClick={() => navigate("/")}
             className="px-8 py-3 rounded-full border border-zinc-800 text-zinc-500 hover:text-white hover:bg-blue-500 hover:border-blue-900 hover:border-3 transition-all text-sm font-bold uppercase tracking-widest"
           >

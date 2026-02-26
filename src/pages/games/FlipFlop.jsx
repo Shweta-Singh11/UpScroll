@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 const FlipFlop = () => {
   return (
@@ -7,11 +7,11 @@ const FlipFlop = () => {
         Flip Flop
       </h1>
       <p className="text-xl text-zinc-500 font-medium mb-12">
-        A placeholder for your memory card game.
+        A placeholder for your flip flop game.
       </p>
-      
+
       <div className="p-20 border-4 border-dashed border-zinc-300 rounded-3xl text-zinc-400 font-bold uppercase">
-        Game Logic Coming Soon
+        Coming Soon
       </div>
     </div>
   );
