@@ -127,7 +127,7 @@ const CaptionWriting = () => {
     try {
       // Send category and email to backend
       const response = await fetch(
-        `http://10.209.220.75:8080/api/captions/image?category=${activity.title}`,
+        `https://brain-backend-3.onrender.com/api/captions/image?category=${activity.title}`,
         {
           method: "GET",
         },
