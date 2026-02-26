@@ -20,7 +20,7 @@ const SignUp = () => {
     setError("");
     try {
       const response = await fetch(
-        "http://10.209.220.75:8080/api/users/register",
+        "https://brain-backend-3.onrender.com/api/users/register",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

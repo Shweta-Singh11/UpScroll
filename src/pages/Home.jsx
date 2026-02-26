@@ -126,10 +126,6 @@ const Home = () => {
           />
           <div className="absolute inset-0 bg-linear-to-b from-[#050505]/40 via-transparent to-[#050505]" />
         </div>
-
-        {/* Glow Effect */}
-        {/* <div className="absolute w-150 h-150 bg-blue-600/10 rounded-full blur-[120px] z-0"></div> */}
-
         {/* Hero Content */}
         <div
           className="relative z-30 text-center px-6 transition-all duration-500"
