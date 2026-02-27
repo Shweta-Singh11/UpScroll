@@ -64,8 +64,8 @@ const categories = [
 const CaptionWriting = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState(() => localStorage.getItem("email") || "");
-  const [selectedId, setSelectedId] = useState(null);
   const [selectedCtg, setSelectedCtg] = useState(null);
+  const [selectedId, setSelectedId] = useState(null);
   const [caption, setCaption] = useState("");
   const [currentImg, setCurrentImg] = useState(null);
   const [isSyncing, setIsSyncing] = useState(false);
@@ -93,6 +93,7 @@ const CaptionWriting = () => {
     setSpecialEvent(null);
     setFeedback(null);
     setCaption("");
+    const currentEmail = localStorage.getItem("email") || email;
 
     if (activity.id === "spiritual" || activity.id === "adult") {
       const eventType = activity.id === "spiritual" ? "meditation" : "caught";
@@ -128,7 +129,7 @@ const CaptionWriting = () => {
     try {
       // Send category and email to backend
       const response = await fetch(
-        `https://brain-backend-3.onrender.com/api/captions/image?category=${activity.title}`,
+        `https://brain-backend-3.onrender.com/api/captions/image?category=${activity.title}&email=${currentEmail}`,
         {
           method: "GET",
         },
@@ -141,12 +142,11 @@ const CaptionWriting = () => {
   };
 
   const handleSubmitCaption = async () => {
-    const currentEmail = localStorage.getItem("email") || "";
-
     if (!currentImg || !currentImg.url) {
       console.error("No image found to submit");
       return;
     }
+    const currentEmail = localStorage.getItem("email") || email;
 
     setIsSyncing(true);
     try {
