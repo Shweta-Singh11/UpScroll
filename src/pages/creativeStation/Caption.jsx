@@ -157,7 +157,7 @@ const CaptionWriting = () => {
       formData.append("email", currentEmail);
 
       const response = await fetch(
-        `http://10.209.220.75:8080/api/captions/evaluate`,
+        `https://brain-backend-3.onrender.com/api/captions/evaluate`,
         {
           method: "POST",
           body: formData,
