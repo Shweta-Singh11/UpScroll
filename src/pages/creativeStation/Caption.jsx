@@ -88,6 +88,7 @@ const CaptionWriting = () => {
     if (storedEmail) setEmail(storedEmail);
   }, [feedback]);
 
+  // fetch image
   const handleFetchImg = async (activity) => {
     setSpecialEvent(null);
     setFeedback(null);
@@ -102,7 +103,7 @@ const CaptionWriting = () => {
         formData.append("category", activity.title);
         formData.append("imageUrl", "");
         formData.append("caption", "");
-        formData.append("username", username);
+        formData.append("email", currentEmail);
 
         const response = await fetch(
           `https://brain-backend-3.onrender.com/api/captions/evaluate`,
@@ -176,7 +177,6 @@ const CaptionWriting = () => {
       setIsSyncing(false);
     }
   };
-
   {
     /*breathing logic*/
   }
@@ -419,7 +419,7 @@ const CaptionWriting = () => {
                     {/* Submit Button */}
                     <button
                       onClick={handleSubmitCaption}
-                      disabled={isSyncing || caption.length < 50}
+                      disabled={isSyncing || caption.length > 300}
                       className="grow flex items-center justify-center gap-1 px-6 py-4 bg-white text-black rounded-2xl font-black uppercase tracking-widest hover:bg-cyan-400 transition-all active:scale-95 disabled:opacity-20"
                     >
                       {isSyncing ? "Analysing..." : "Submit Caption"}
