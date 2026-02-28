@@ -17,18 +17,18 @@ const Navbar = () => {
 
   return (
     <nav
-      className={`fixed top-0 left-0 w-full z-50 flex justify-between items-center px-8 lg:px-16 transition-all duration-500
+      className={`fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 md:px-16 transition-all duration-500
       ${
         scrolled
-          ? "py-4 bg-black/60 backdrop-blur-xl shadow-[0_4px_30px_rgba(0,0,0,0.6)]"
+          ? "py-3 bg-black/60 backdrop-blur-xl shadow-[0_4px_30px_rgba(0,0,0,0.6)]"
           : "py-6 bg-transparent"
       }`}
     >
       {/* Left */}
-      <div className="flex gap-12 items-center">
+      <div className="flex gap-10 items-center">
         <Link
           to="/"
-          className="font-black text-2xl tracking-tighter uppercase italic text-white"
+          className="font-black text-xl md:text-2xl tracking-tighter uppercase italic text-white shrink-0"
         >
           UpScroll
         </Link>
@@ -43,7 +43,7 @@ const Navbar = () => {
             <Link
               key={index}
               to={item.path}
-              className="text-[11px] font-black uppercase tracking-widest text-white-400 hover:text-white transition duration-300"
+              className="text-[10px] font-black uppercase tracking-widest text-zinc-400 hover:text-white transition duration-300"
             >
               {item.name}
             </Link>
@@ -52,14 +52,14 @@ const Navbar = () => {
       </div>
 
       {/* Right */}
-      <div className="flex items-center gap-6">
-        <Link to="/login">
+      <div className="flex items-center gap-4">
+        <Link to="/login" className=" md:block">
           <button className="text-[11px] font-black uppercase tracking-widest text-zinc-400 hover:text-white transition">
             Login
           </button>
         </Link>
 
-        <Link to="/signup">
+        <Link to="/signup" className="hidden md:block">
           <button
             className="px-6 py-2 bg-white text-black text-[11px] font-black uppercase tracking-widest rounded-full 
           hover:bg-blue-500 hover:text-white transition-all duration-300 shadow-[0_0_25px_rgba(255,255,255,0.15)] hover:shadow-blue-500/40"
