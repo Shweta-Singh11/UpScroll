@@ -109,7 +109,7 @@ const Home = () => {
   return (
     <div className="min-h-screen bg-[#010924]">
       {/* HERO SECTION */}
-      <section className="relative h-screen flex items-center justify-center overflow-hidden bg-[#050505] ">
+      <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-[#050505] pb-20 md:pb-32 ">
         <div className="absolute bottom-0 left-0 w-full h-[50vh] bg-linear-to-t from-[#050505] via-[#050505]/80 to-transparent z-20 pointer-events-none"></div>
         {/* Subtle Parallax Background */}
         <div
@@ -157,7 +157,7 @@ const Home = () => {
         </div>
       </section>
       {/* svg */}
-      <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-0 z-20 translate-y-[1px]">
+      <div className="relative w-full overflow-hidden leading-0 z-20 -mt-1">
         <svg
           data-name="Layer 1"
           xmlns="http://www.w3.org/2000/svg"
@@ -173,53 +173,56 @@ const Home = () => {
       </div>
 
       {/* activities */}
-      <div className="max-w-7xl mx-auto px-6 py-20 relative z-40 bg-[#010924]">
-        <header className="mb-16 space-y-4">
-          <p className="text-zinc-500  text-xl font-medium max-w-xl">
-            Welcome! <span className="text-blue-500 font-bold">{username}</span>
-            . Select an activity to proceed.
-          </p>
-        </header>
+      <div className="bg-[#010924] relative z-40 -mt-px">
+        <div className="max-w-7xl mx-auto px-6 py-10 md:py-20">
+          <header className="mb-16 space-y-4">
+            <p className="text-zinc-500  text-xl font-medium max-w-xl">
+              Welcome!{" "}
+              <span className="text-blue-500 font-bold">{username}</span>.
+              Select an activity to proceed.
+            </p>
+          </header>
 
-        {/* Activity Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 items-center">
-          {activities.map((activity, index) => (
-            <div
-              key={index}
-              onClick={() => navigate(activity.path)}
-              className={`group relative cursor-pointer transition-all duration-500 hover:-translate-y-4 
-                ${index === 1 ? "md:scale-110 z-20" : "md:scale-95"}`}
-            >
+          {/* Activity Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10 items-center">
+            {activities.map((activity, index) => (
               <div
-                className="h-full p-8 rounded-[2.5rem] bg-white/5 backdrop-blur-xl border border-white/10 
-                              shadow-[0_20px_50px_rgba(0,0,0,0.3)] 
-                              group-hover:border-white/20 transition-all"
+                key={index}
+                onClick={() => navigate(activity.path)}
+                className={`group relative cursor-pointer transition-all duration-500 hover:-translate-y-4 
+                ${index === 1 ? "md:scale-110 z-20" : "md:scale-95"}`}
               >
                 <div
-                  className={`w-16 h-16 mb-6 rounded-2xl flex items-center justify-center bg-linear-to-br ${activity.bgColor} 
-                                text-white shadow-lg group-hover:scale-110 transition-transform duration-500`}
+                  className="h-full p-8 rounded-[2.5rem] bg-white/5 backdrop-blur-xl border border-white/10 
+                              shadow-[0_20px_50px_rgba(0,0,0,0.3)] 
+                              group-hover:border-white/20 transition-all"
                 >
-                  {activity.icon}
-                </div>
-
-                <h3 className="text-2xl font-black text-white mb-3 uppercase italic tracking-tight">
-                  {activity.title}
-                </h3>
-                <p className="text-zinc-400 text-sm leading-relaxed mb-8">
-                  {activity.description}
-                </p>
-
-                <div className="w-full h-1 bg-white/5 rounded-full overflow-hidden">
                   <div
-                    className={`h-full w-1/3 bg-linear-to-r ${activity.bgColor} group-hover:w-full transition-all duration-1000`}
-                  ></div>
+                    className={`w-16 h-16 mb-6 rounded-2xl flex items-center justify-center bg-linear-to-br ${activity.bgColor} 
+                                text-white shadow-lg group-hover:scale-110 transition-transform duration-500`}
+                  >
+                    {activity.icon}
+                  </div>
+
+                  <h3 className="text-2xl font-black text-white mb-3 uppercase italic tracking-tight">
+                    {activity.title}
+                  </h3>
+                  <p className="text-zinc-400 text-sm leading-relaxed mb-8">
+                    {activity.description}
+                  </p>
+
+                  <div className="w-full h-1 bg-white/5 rounded-full overflow-hidden">
+                    <div
+                      className={`h-full w-1/3 bg-linear-to-r ${activity.bgColor} group-hover:w-full transition-all duration-1000`}
+                    ></div>
+                  </div>
                 </div>
+                <div
+                  className={`absolute inset-0 -z-10 bg-linear-to-br ${activity.bgColor} opacity-0 group-hover:opacity-20 blur-3xl transition-opacity duration-500 rounded-[2.5rem]`}
+                ></div>
               </div>
-              <div
-                className={`absolute inset-0 -z-10 bg-linear-to-br ${activity.bgColor} opacity-0 group-hover:opacity-20 blur-3xl transition-opacity duration-500 rounded-[2.5rem]`}
-              ></div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
 
