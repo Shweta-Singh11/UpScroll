@@ -107,7 +107,7 @@ const Home = () => {
   const translateZ = scrollProgress * 100;
 
   return (
-    <div className="min-h-screen  bg-linear-to-b from-[#0c0d17] via-[#010924] to-[#142142]">
+    <div className="min-h-screen bg-[#010924]">
       {/* HERO SECTION */}
       <section className="relative h-screen flex items-center justify-center overflow-hidden bg-[#050505] ">
         <div className="absolute bottom-0 left-0 w-full h-[50vh] bg-linear-to-t from-[#050505] via-[#050505]/80 to-transparent z-20 pointer-events-none"></div>
@@ -157,7 +157,7 @@ const Home = () => {
         </div>
       </section>
       {/* svg */}
-      <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-0 z-20">
+      <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-0 z-20 translate-y-[1px]">
         <svg
           data-name="Layer 1"
           xmlns="http://www.w3.org/2000/svg"
@@ -173,7 +173,7 @@ const Home = () => {
       </div>
 
       {/* activities */}
-      <div className="max-w-7xl mx-auto px-6 py-20 relative z-40">
+      <div className="max-w-7xl mx-auto px-6 py-20 relative z-40 bg-[#010924]">
         <header className="mb-16 space-y-4">
           <p className="text-zinc-500  text-xl font-medium max-w-xl">
             Welcome! <span className="text-blue-500 font-bold">{username}</span>
