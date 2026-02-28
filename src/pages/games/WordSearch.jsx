@@ -21,6 +21,7 @@ const WordSearch = () => {
   const [showAura, setShowAura] = useState(false);
   const [totalAuraPoints, setTotalAuraPoints] = useState(null);
   const syncStarted = useRef(false);
+  const gridRef = useRef(null);
   const username = localStorage.getItem("username") || "Explorer";
 
   useEffect(() => {
@@ -190,15 +191,28 @@ const WordSearch = () => {
   }, [gameState]);
 
   // Interaction
-  const handleMouseDown = (r, c) => {
+  const handlePointerDown = (r, c) => {
     if (gameState !== "playing") return;
     setIsSelecting(true);
     setSelectionStart({ r, c });
     setCurrentSelection([{ r, c }]);
   };
 
-  const handleMouseEnter = (r, c) => {
-    if (!isSelecting) return;
+  const handlePointerMove = (e) => {
+    if (!isSelecting || !selectionStart) return;
+
+    // Support both mouse and touch coordinates
+    const x = e.clientX || (e.touches && e.touches[0].clientX);
+    const y = e.clientY || (e.touches && e.touches[0].clientY);
+
+    const element = document.elementFromPoint(x, y);
+    if (!element) return;
+
+    const r = parseInt(element.getAttribute("data-row"));
+    const c = parseInt(element.getAttribute("data-col"));
+
+    if (isNaN(r) || isNaN(c)) return;
+
     if (r === selectionStart.r || c === selectionStart.c) {
       const newSelection = [];
       const rowStart = Math.min(selectionStart.r, r),
@@ -213,7 +227,7 @@ const WordSearch = () => {
     }
   };
 
-  const handleMouseUp = () => {
+  const handlePointerUp = () => {
     if (!isSelecting) return;
     setIsSelecting(false);
     const selected = currentSelection
@@ -239,10 +253,7 @@ const WordSearch = () => {
       return;
     }
     syncStarted.current = false;
-
-    const newAttempts = gameAttempts + 1;
-    setGameAttempts(newAttempts);
-
+    setGameAttempts((prev) => prev + 1);
     generateGameGrid();
     setTimer(60);
     setScore(0);
@@ -253,8 +264,8 @@ const WordSearch = () => {
 
   return (
     <div
-      className="min-h-screen w-full pt-24 pb-12 px-6 relative overflow-hidden bg-[#1a1818] text-white font-sans"
-      onMouseUp={handleMouseUp}
+      className="min-h-screen w-full pt-12 md:pt-24 pb-12 px-4 md:px-6 relative overflow-hidden bg-[#1a1818] text-white font-sans"
+      onPointerUp={handlePointerUp}
     >
       {/* Background Orbs */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-cyan-500/10 rounded-full blur-[120px]"></div>
@@ -262,21 +273,21 @@ const WordSearch = () => {
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-red-500/10 rounded-full blur-[120px]"></div>
       <div className="absolute bottom-0 right-0 w-96 h-96 bg-green-500/10 rounded-full blur-[120px]"></div>
 
-      <div className="max-w-6xl mx-auto relative z-10">
+      <div className="max-w-6xl mt-4 md:mt-2 mx-auto relative z-10">
         <button
           onClick={() => navigate("/")}
           className="flex items-center gap-2 text-zinc-500 hover:text-white transition-all mb-8 group"
         >
           <ArrowLeft
-            size={18}
+            size={16}
             className="group-hover:-translate-x-1 transition-transform"
           />
           <span className="text-[10px] font-black uppercase tracking-[0.2em]">
             Exit
           </span>
         </button>
-        <header className="text-center mb-16">
-          <h1 className="text-6xl font-black italic tracking-tighter uppercase leading-none mb-2">
+        <header className="text-center mb-8 md:mb-16">
+          <h1 className="text-4xl md:text-6xl font-black italic tracking-tighter uppercase leading-none mb-2">
             Word{" "}
             <span className="bg-linear-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent pr-4">
               SEARCH
@@ -288,13 +299,13 @@ const WordSearch = () => {
           </div>
         </header>
 
-        <div className="flex flex-col lg:flex-row gap-12 items-start justify-center">
+        <div className="flex flex-col lg:flex-row gap-6 md:gap-12 items-center lg:items-start justify-center">
           {/* Word List */}
-          <div className="w-full lg:w-64 bg-[#111]/50 backdrop-blur-xl p-6 rounded-4xl border border-white/10 shadow-2xl">
-            <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500 mb-6 text-center">
+          <div className="w-full lg:w-64 bg-[#111]/50 backdrop-blur-xl p-4 md:p-6 rounded-xl border border-white/10 shadow-2xl">
+            <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500 mb-4 text-center">
               Words List
             </h3>
-            <div className="flex flex-wrap lg:flex-col gap-2">
+            <div className="flex flex-wrap lg:flex-col gap-2 justify-center">
               {words.map((word, idx) => (
                 <span
                   key={idx}
@@ -311,8 +322,12 @@ const WordSearch = () => {
           </div>
 
           {/* Grid Area */}
-          <div className="relative flex flex-col items-center">
-            <div className="grid grid-cols-10 gap-1.5 p-3 bg-[#111]/50 backdrop-blur-xl rounded-[2.5rem] border border-white/10 shadow-[0_0_50px_-12px_rgba(0,0,0,0.5)] select-none relative overflow-hidden">
+          <div className="relative flex flex-col items-center w-full max-w-[95vw] sm:max-w-md mx-auto">
+            <div
+              ref={gridRef}
+              onPointerMove={handlePointerMove}
+              className="grid grid-cols-10 gap-1 md:gap-1.5 p-2 md:p-3 bg-[#111]/50 backdrop-blur-xl rounded-3xl border border-white/10 touch-none select-none w-full"
+            >
               {grid.map((row, rIdx) =>
                 row.map((letter, cIdx) => {
                   const isSelected = currentSelection.some(
@@ -321,19 +336,15 @@ const WordSearch = () => {
                   const isFound = foundCells.some(
                     (c) => c.r === rIdx && c.c === cIdx,
                   );
+
                   return (
                     <div
                       key={`${rIdx}-${cIdx}`}
-                      onMouseDown={() => handleMouseDown(rIdx, cIdx)}
-                      onMouseEnter={() => handleMouseEnter(rIdx, cIdx)}
-                      className={`w-9 h-9 md:w-11 md:h-11 flex items-center justify-center rounded-xl font-black text-sm transition-all duration-150 border
-                        ${
-                          isSelected
-                            ? "bg-cyan-500 text-black border-cyan-400 shadow-[0_0_20px_rgba(34,211,238,0.4)] scale-90"
-                            : isFound
-                              ? "bg-violet-500/50 text-violet-400 border-violet-500/30 opacity-90"
-                              : "bg-white/5 text-zinc-500 border-transparent hover:border-white/20 hover:text-white hover:bg-white/10"
-                        }`}
+                      data-row={rIdx}
+                      data-col={cIdx}
+                      onPointerDown={() => handlePointerDown(rIdx, cIdx)}
+                      className={`aspect-square flex items-center justify-center rounded-lg md:rounded-xl font-black transition-all duration-150 border text-[10px] xs:text-xs md:text-sm
+                      ${isSelected ? "bg-cyan-500 text-black border-cyan-400 scale-95" : isFound ? "bg-violet-500/50 text-violet-400" : "bg-white/5 text-zinc-500"}`}
                     >
                       {letter}
                     </div>
@@ -343,13 +354,11 @@ const WordSearch = () => {
 
               {/* Rules Overlay */}
               {gameState === "idle" && (
-                <div className="absolute inset-0 bg-[#050505]/95 backdrop-blur-xl flex items-center justify-center z-20 p-4">
-                  <div className="max-w-md w-full animate-in fade-in zoom-in duration-500">
-                    <div className="bg-[#111] border border-white/10 rounded-4xl p-8 shadow-2xl relative overflow-hidden">
-                      <div className="absolute -top-24 -right-24 w-48 h-48 bg-cyan-500/10 rounded-full blur-3xl"></div>
-
-                      <h3 className="text-2xl font-black italic uppercase tracking-tighter text-white mb-6 flex items-center gap-3">
-                        <span className="w-8 h-8 rounded-lg bg-cyan-500 flex items-center justify-center text-black not-italic text-sm">
+                <div className="absolute inset-0 bg-[#050505]/95 backdrop-blur-xl flex items-center justify-center z-20 p-2 md:p-4 rounded-3xl md:rounded-[2.5rem]">
+                  <div className="w-full max-h-full flex flex-col items-center justify-between overflow-y-auto animate-in fade-in zoom-in duration-300 scrollbar-hide">
+                    <div className="text-center mt-2">
+                      <h3 className="text-sm md:text-xl font-black italic uppercase tracking-tighter text-white flex items-center justify-center gap-2 pb-1 md:pb-4">
+                        <span className="w-4 h-4 md:w-8 md:h-8 rounded bg-cyan-500 flex items-center justify-center text-black not-italic text-[10px] md:text-sm">
                           !
                         </span>
                         Game Rules
