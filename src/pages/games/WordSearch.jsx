@@ -41,7 +41,7 @@ const WordSearch = () => {
   const fetchWords = async () => {
     try {
       const response = await fetch(
-        "https://brain-backend-3.onrender.com/api/games/wordsearch/generate",
+        `${import.meta.env.VITE_API_BASE_URL}/api/games/wordsearch/generate`,
       );
       const data = await response.json();
       setWords(data.map((w) => w.toUpperCase()));
@@ -79,7 +79,7 @@ const WordSearch = () => {
     syncStarted.current = true;
     try {
       const response = await fetch(
-        `https://brain-backend-3.onrender.com/api/games/wordsearch/submit?email=${currentEmail}&wordsFound=${finalWords.length}&gameAttempts=${attempts}`,
+        `${import.meta.env.VITE_API_BASE_URL}/api/games/wordsearch/submit?email=${currentEmail}&wordsFound=${finalWords.length}&gameAttempts=${attempts}`,
         {
           method: "POST",
         },

@@ -18,7 +18,7 @@ const FactStation = () => {
     setLoading(true);
     try {
       const response = await fetch(
-        "https://brain-backend-3.onrender.com/api/facts/random",
+        `${import.meta.env.VITE_API_BASE_URL}/api/facts/random`,
       );
       const data = await response.json();
       setFact({ text: data.text || data, id: data.id || Date.now() });

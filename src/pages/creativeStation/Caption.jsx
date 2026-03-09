@@ -32,7 +32,7 @@ const categories = [
   {
     id: "art-history",
     title: "Artful History",
-    desc: "Analyze the masterpieces of art and the heavy weight of hisory.",
+    desc: "Analyze the masterpieces of art and the heavy weight of history.",
     image: art_history,
   },
   {
@@ -107,7 +107,7 @@ const CaptionWriting = () => {
         formData.append("email", currentEmail);
 
         const response = await fetch(
-          `https://brain-backend-3.onrender.com/api/captions/evaluate`,
+          `${import.meta.env.VITE_API_BASE_URL}/api/captions/evaluate`,
           {
             method: "POST",
             body: formData,
@@ -129,7 +129,7 @@ const CaptionWriting = () => {
     try {
       // Send category and email to backend
       const response = await fetch(
-        `https://brain-backend-3.onrender.com/api/captions/image?category=${activity.title}&email=${currentEmail}`,
+        `${import.meta.env.VITE_API_BASE_URL}/api/captions/image?category=${activity.title}&email=${currentEmail}`,
         {
           method: "GET",
         },
@@ -158,7 +158,7 @@ const CaptionWriting = () => {
       formData.append("email", currentEmail);
 
       const response = await fetch(
-        `https://brain-backend-3.onrender.com/api/captions/evaluate`,
+        `${import.meta.env.VITE_API_BASE_URL}/api/captions/evaluate`,
         {
           method: "POST",
           body: formData,
