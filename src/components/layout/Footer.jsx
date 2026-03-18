@@ -86,7 +86,7 @@ const Footer = () => {
 
         {/* copyright */}
         <div className="mt-16 pt-8 border-t border-zinc-900 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] uppercase tracking-widest text-zinc-600">
-          <p>© 2026 Doom. Crafted for focus.</p>
+          <p>© 2026 UpScroll. Crafted for focus.</p>
           <div className="flex gap-8">
             <a href="/privacy" className="hover:text-white transition-colors">
               Privacy Policy
