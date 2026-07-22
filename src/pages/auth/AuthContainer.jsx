@@ -26,10 +26,11 @@ const AuthContainer = ({ initialView = "login" }) => {
 
   const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
+  // --- 1. SIGNUP LOGIC (Updated to Render URL) ---
   const handleSignup = async (e) => {
     e.preventDefault(); setError(""); setMessage("");
     try {
-      const response = await fetch("http://localhost:8081/api/users/register", {
+      const response = await fetch("https://brain-backend-3.onrender.com/api/users/register", {
         method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username: formData.username, email: formData.email, password: formData.password }),
       });
@@ -44,10 +45,11 @@ const AuthContainer = ({ initialView = "login" }) => {
     } catch (err) { setError("Server connection failed."); }
   };
 
+  // --- 2. LOGIN LOGIC (Updated to Render URL) ---
   const handleLogin = async (e) => {
     e.preventDefault(); setError(""); setMessage("");
     try {
-      const response = await fetch("http://localhost:8081/api/users/login", {
+      const response = await fetch("https://brain-backend-3.onrender.com/api/users/login", {
         method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: formData.email, password: formData.password }),
       });
@@ -64,10 +66,11 @@ const AuthContainer = ({ initialView = "login" }) => {
     } catch (err) { setError("Server connection failed."); }
   };
 
+  // --- 3. VERIFY OTP LOGIC (Updated to Render URL) ---
   const handleVerifyOtp = async (e) => {
     e.preventDefault(); setError(""); setMessage("");
     try {
-      const response = await fetch("http://localhost:8081/api/users/verifyOtp", {
+      const response = await fetch("https://brain-backend-3.onrender.com/api/users/verifyOtp", {
         method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: formData.email, otp: formData.otp }),
       });
@@ -79,10 +82,11 @@ const AuthContainer = ({ initialView = "login" }) => {
     } catch (err) { setError("Server connection failed."); }
   };
 
+  // --- 4. RESEND OTP LOGIC (Updated to Render URL) ---
   const handleResendOtp = async () => {
     setError(""); setMessage("");
     try {
-      const response = await fetch("http://localhost:8081/api/users/resendOtp", {
+      const response = await fetch("https://brain-backend-3.onrender.com/api/users/resendOtp", {
         method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: formData.email }),
       });
@@ -114,7 +118,7 @@ const AuthContainer = ({ initialView = "login" }) => {
               <input name="password" type={showPassword ? "text" : "password"} placeholder="PASSWORD" required value={formData.password} onChange={handleChange} className="w-full px-4 py-4 rounded-xl border border-zinc-200 focus:border-black outline-none font-semibold bg-zinc-50" />
               <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-black">{showPassword ? <EyeOff size={20} /> : <Eye size={20} />}</button>
             </div>
-            <button type="submit" className="w-full bg-black text-white py-4 font-black rounded-xl uppercase tracking-widest mt-4">Enter the Void</button>
+            <button type="submit" className="w-full bg-black text-white py-4 font-black rounded-xl uppercase tracking-widest mt-4 cursor-pointer hover:bg-zinc-800 transition-colors">Enter The Void</button>
             <p className="text-center text-xs font-bold text-zinc-400 uppercase tracking-widest mt-4">New here? <button type="button" onClick={() => setCurrentView("signup")} className="text-black underline">Sign Up</button></p>
           </form>
         )}
@@ -127,7 +131,7 @@ const AuthContainer = ({ initialView = "login" }) => {
               <input name="password" type={showPassword ? "text" : "password"} placeholder="PASSWORD" required value={formData.password} onChange={handleChange} className="w-full px-4 py-4 rounded-xl border border-zinc-200 focus:border-black outline-none font-semibold bg-zinc-50" />
               <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-black">{showPassword ? <EyeOff size={20} /> : <Eye size={20} />}</button>
             </div>
-            <button type="submit" className="w-full bg-black text-white py-4 font-black rounded-xl uppercase tracking-widest mt-4">Begin Journey</button>
+            <button type="submit" className="w-full bg-black text-white py-4 font-black rounded-xl uppercase tracking-widest mt-4 cursor-pointer hover:bg-zinc-800 transition-colors">Begin Journey</button>
             <p className="text-center text-xs font-bold text-zinc-400 uppercase tracking-widest mt-4">Already a member? <button type="button" onClick={() => setCurrentView("login")} className="text-black underline">Log In</button></p>
           </form>
         )}
