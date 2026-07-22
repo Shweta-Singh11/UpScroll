@@ -118,7 +118,7 @@ const AuthContainer = ({ initialView = "login" }) => {
               <input name="password" type={showPassword ? "text" : "password"} placeholder="PASSWORD" required value={formData.password} onChange={handleChange} className="w-full px-4 py-4 rounded-xl border border-zinc-200 focus:border-black outline-none font-semibold bg-zinc-50" />
               <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-black">{showPassword ? <EyeOff size={20} /> : <Eye size={20} />}</button>
             </div>
-            <button type="submit" className="w-full bg-black text-white py-4 font-black rounded-xl uppercase tracking-widest mt-4">Enter the Void</button>
+            <button type="submit" className="w-full bg-black text-white py-4 font-black rounded-xl uppercase tracking-widest mt-4 cursor-pointer hover:bg-zinc-800 transition-colors">Enter The Void</button>
             <p className="text-center text-xs font-bold text-zinc-400 uppercase tracking-widest mt-4">New here? <button type="button" onClick={() => setCurrentView("signup")} className="text-black underline">Sign Up</button></p>
           </form>
         )}
@@ -131,7 +131,7 @@ const AuthContainer = ({ initialView = "login" }) => {
               <input name="password" type={showPassword ? "text" : "password"} placeholder="PASSWORD" required value={formData.password} onChange={handleChange} className="w-full px-4 py-4 rounded-xl border border-zinc-200 focus:border-black outline-none font-semibold bg-zinc-50" />
               <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-black">{showPassword ? <EyeOff size={20} /> : <Eye size={20} />}</button>
             </div>
-            <button type="submit" className="w-full bg-black text-white py-4 font-black rounded-xl uppercase tracking-widest mt-4">Begin Journey</button>
+            <button type="submit" className="w-full bg-black text-white py-4 font-black rounded-xl uppercase tracking-widest mt-4 cursor-pointer hover:bg-zinc-800 transition-colors">Begin Journey</button>
             <p className="text-center text-xs font-bold text-zinc-400 uppercase tracking-widest mt-4">Already a member? <button type="button" onClick={() => setCurrentView("login")} className="text-black underline">Log In</button></p>
           </form>
         )}
