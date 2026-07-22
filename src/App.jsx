@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
-import SignUp from './pages/auth/SignUp';
-import Login from './pages/auth/Login';
+// import SignUp from './pages/auth/SignUp';
+// import Login from './pages/auth/Login';
+import AuthContainer from './pages/auth/AuthContainer';
 import FactStation from './pages/FactStation';
 import MemoryGame from './pages/games/MemoryGame';
 import Sudoku from './pages/games/Sudoku';
@@ -27,8 +28,10 @@ function App() {
         <main className="w-full ">
           <Routes>
             <Route path="/" element={<Home />} /> 
-            <Route path="/signup" element={<SignUp />} />
-            <Route path="/login" element={<Login />} />
+            {/* <Route path="/signup" element={<SignUp />} />
+            <Route path="/login" element={<Login />} /> */}
+            <Route path="/signup" element={<AuthContainer initialView="signup" />} />
+            <Route path="/login" element={<AuthContainer initialView="login" />} />
             <Route path="/activities/fact-station" element={<FactStation />} />
             <Route path="/activities/logic" element={<MemoryGame />} />
             <Route path="/activities/logic/sudoku" element={<Sudoku />} />
