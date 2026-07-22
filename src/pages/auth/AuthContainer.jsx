@@ -26,10 +26,11 @@ const AuthContainer = ({ initialView = "login" }) => {
 
   const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
+  // --- 1. SIGNUP LOGIC (Updated to Render URL) ---
   const handleSignup = async (e) => {
     e.preventDefault(); setError(""); setMessage("");
     try {
-      const response = await fetch("http://localhost:8081/api/users/register", {
+      const response = await fetch("https://brain-backend-3.onrender.com/api/users/register", {
         method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username: formData.username, email: formData.email, password: formData.password }),
       });
@@ -44,10 +45,11 @@ const AuthContainer = ({ initialView = "login" }) => {
     } catch (err) { setError("Server connection failed."); }
   };
 
+  // --- 2. LOGIN LOGIC (Updated to Render URL) ---
   const handleLogin = async (e) => {
     e.preventDefault(); setError(""); setMessage("");
     try {
-      const response = await fetch("http://localhost:8081/api/users/login", {
+      const response = await fetch("https://brain-backend-3.onrender.com/api/users/login", {
         method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: formData.email, password: formData.password }),
       });
@@ -64,10 +66,11 @@ const AuthContainer = ({ initialView = "login" }) => {
     } catch (err) { setError("Server connection failed."); }
   };
 
+  // --- 3. VERIFY OTP LOGIC (Updated to Render URL) ---
   const handleVerifyOtp = async (e) => {
     e.preventDefault(); setError(""); setMessage("");
     try {
-      const response = await fetch("http://localhost:8081/api/users/verifyOtp", {
+      const response = await fetch("https://brain-backend-3.onrender.com/api/users/verifyOtp", {
         method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: formData.email, otp: formData.otp }),
       });
@@ -79,10 +82,11 @@ const AuthContainer = ({ initialView = "login" }) => {
     } catch (err) { setError("Server connection failed."); }
   };
 
+  // --- 4. RESEND OTP LOGIC (Updated to Render URL) ---
   const handleResendOtp = async () => {
     setError(""); setMessage("");
     try {
-      const response = await fetch("http://localhost:8081/api/users/resendOtp", {
+      const response = await fetch("https://brain-backend-3.onrender.com/api/users/resendOtp", {
         method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: formData.email }),
       });
