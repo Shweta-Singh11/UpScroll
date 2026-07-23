@@ -11,6 +11,7 @@ const SignUp = () => {
     email: "",
     password: "",
   });
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -25,7 +26,7 @@ const SignUp = () => {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(formData),
-        },
+        }
       );
 
       if (response.ok) {
@@ -33,25 +34,27 @@ const SignUp = () => {
         localStorage.setItem("username", formData.username);
         navigate("/login");
       } else if (response.status === 409) {
-        setError("This email is already registered.Try another email.");
+        setError("This email is already registered. Try another email.");
       }
     } catch (error) {
       console.error("Sign Up failed", error);
+      setError("Server connection failed.");
     }
   };
+
   return (
-    <div className="min-h-[80vh] flex items-center justify-center px-4 bg-[#141532] ">
-      <div className="max-w-md w-full space-y-4 mt-18 mb-4 p-10 rounded-2xl border-2 bg-white border-black">
+    <div className="min-h-[85vh] flex items-center justify-center px-4 bg-gradient-to-br from-slate-100 via-zinc-100 to-indigo-50/20 dark:from-[#0a0b10] dark:via-[#0c0e18] dark:to-[#05060b] transition-colors duration-300">
+      <div className="max-w-md w-full space-y-6 mt-20 mb-8 p-10 rounded-3xl bg-white dark:bg-zinc-900/40 border border-slate-200 dark:border-zinc-800/80 shadow-2xl backdrop-blur-sm transition-all duration-300">
         <div className="text-center">
-          <h2 className="text-4xl font-black text-black italic tracking-tighter uppercase">
-            Sign Up!!
+          <h2 className="text-4xl font-black text-slate-900 dark:text-white italic tracking-tighter uppercase">
+            Sign Up !!
           </h2>
-          <p className="mt-2 text-zinc-500 font-medium">
+          <p className="mt-2 text-slate-500 dark:text-zinc-400 font-medium">
             Create an account to track your focus journey.
           </p>
         </div>
 
-        <form onSubmit={fetchUser} className="mt-8 space-y-4 text-black">
+        <form onSubmit={fetchUser} className="mt-8 space-y-4 text-slate-800 dark:text-zinc-200">
           <input
             name="username"
             type="text"
@@ -59,7 +62,7 @@ const SignUp = () => {
             value={formData.username}
             onChange={handleChange}
             required
-            className="w-full px-4 py-4 border-2 border-zinc-200 focus:border-black outline-none font-semibold transition-all placeholder:text-zinc-300"
+            className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-zinc-800 focus:border-indigo-600 dark:focus:border-cyan-400 focus:ring-2 focus:ring-indigo-600/5 dark:focus:ring-cyan-400/5 outline-none transition-all font-semibold placeholder:text-slate-400 dark:placeholder:text-zinc-500 bg-slate-50/50 dark:bg-zinc-900/50 text-slate-800 dark:text-zinc-100"
           />
           <input
             name="email"
@@ -68,7 +71,7 @@ const SignUp = () => {
             value={formData.email}
             onChange={handleChange}
             required
-            className="w-full px-4 py-4 border-2 border-zinc-200 focus:border-black outline-none font-semibold transition-all placeholder:text-zinc-300"
+            className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-zinc-800 focus:border-indigo-600 dark:focus:border-cyan-400 focus:ring-2 focus:ring-indigo-600/5 dark:focus:ring-cyan-400/5 outline-none transition-all font-semibold placeholder:text-slate-400 dark:placeholder:text-zinc-500 bg-slate-50/50 dark:bg-zinc-900/50 text-slate-800 dark:text-zinc-100"
           />
           <div className="relative">
             <input
@@ -78,20 +81,20 @@ const SignUp = () => {
               value={formData.password}
               onChange={handleChange}
               required
-              className="w-full px-4 py-4 border-2 border-zinc-200 focus:border-black outline-none font-semibold transition-all placeholder:text-zinc-300"
+              className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-zinc-800 focus:border-indigo-600 dark:focus:border-cyan-400 focus:ring-2 focus:ring-indigo-600/5 dark:focus:ring-cyan-400/5 outline-none transition-all font-semibold placeholder:text-slate-400 dark:placeholder:text-zinc-500 bg-slate-50/50 dark:bg-zinc-900/50 text-slate-800 dark:text-zinc-100"
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-black transition-colors"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-zinc-500 hover:text-slate-800 dark:hover:text-zinc-300 transition-colors p-1 cursor-pointer"
             >
-              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
             </button>
           </div>
 
           {error && (
-            <div className="p-3 rounded-lg bg-red-50 border border-red-200 animate-in fade-in slide-in-from-top-1">
-              <p className="text-[12px] text-red-600  tracking-wider text-center">
+            <div className="p-3 rounded-xl bg-red-50 border border-red-200 dark:bg-red-950/20 dark:border-red-900/30 animate-in fade-in slide-in-from-top-1">
+              <p className="text-[11px] text-red-600 dark:text-red-400 tracking-wider text-center font-bold">
                 {error}
               </p>
             </div>
@@ -99,16 +102,16 @@ const SignUp = () => {
 
           <button
             type="submit"
-            className="w-full bg-black text-white py-5 font-black  rounded-3xl uppercase tracking-widest hover:bg-zinc-800 transition-all duration-300 mt-4"
+            className="w-full bg-zinc-900 text-white dark:bg-white dark:text-black border border-zinc-900 dark:border-white py-4 font-black uppercase tracking-widest rounded-xl hover:bg-indigo-600 hover:text-white hover:border-indigo-600 dark:hover:bg-zinc-900 dark:hover:text-white dark:hover:border-zinc-800 transition-all duration-300 mt-4 shadow-md dark:shadow-[0_10px_30px_rgba(0,0,0,0.15)] active:scale-95 cursor-pointer"
           >
             Begin Journey
           </button>
         </form>
 
-        <p className="text-center text-xs font-bold text-zinc-400 uppercase tracking-widest">
+        <p className="text-center text-xs font-bold text-slate-400 dark:text-zinc-500 uppercase tracking-widest">
           Already a member?{" "}
-          <Link to="/login" className="text-black  underline">
-            LogIn
+          <Link to="/login" className="text-indigo-600 dark:text-cyan-400 hover:underline font-bold transition-all ml-1">
+            Log In
           </Link>
         </p>
       </div>

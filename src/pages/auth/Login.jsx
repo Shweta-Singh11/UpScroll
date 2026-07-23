@@ -27,7 +27,7 @@ const Login = () => {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(formData),
-        },
+        }
       );
 
       if (response.ok) {
@@ -51,20 +51,20 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-[80vh] flex items-center justify-center px-4 bg-linear-to-br from-[#0f1023] via-[#141532] to-[#0c0d1a]">
-      <div className="max-w-md w-full space-y-4 mt-16 mb-4 p-10 rounded-2xl bg-white border border-black/10 shadow-[0_20px_60px_rgba(0,0,0,0.25)] ">
+    <div className="min-h-[85vh] flex items-center justify-center px-4 bg-gradient-to-br from-slate-100 via-zinc-100 to-indigo-50/20 dark:from-[#0a0b10] dark:via-[#0c0e18] dark:to-[#05060b] transition-colors duration-300">
+      <div className="max-w-md w-full space-y-6 mt-20 mb-8 p-10 rounded-3xl bg-white dark:bg-zinc-900/40 border border-slate-200 dark:border-zinc-800/80 shadow-2xl backdrop-blur-sm transition-all duration-300">
         <div className="text-center">
-          <h2 className="text-4xl font-black text-black italic tracking-tighter uppercase">
+          <h2 className="text-4xl font-black text-slate-900 dark:text-white italic tracking-tighter uppercase">
             Welcome Back !!
           </h2>
-          <p className="mt-2 text-zinc-500 font-medium">
+          <p className="mt-2 text-slate-500 dark:text-zinc-400 font-medium">
             Break the scroll. Reclaim your focus.
           </p>
         </div>
 
-        <form onSubmit={fetchLogin} className="mt-8 space-y-4 text-black">
+        <form onSubmit={fetchLogin} className="mt-8 space-y-4 text-slate-800 dark:text-zinc-200">
           {error && (
-            <p className="text-red-500 text-center text-[10px] font-bold uppercase">
+            <p className="text-red-500 text-center text-[11px] font-bold uppercase">
               {error}
             </p>
           )}
@@ -76,7 +76,7 @@ const Login = () => {
             required
             value={formData.email}
             onChange={handleChange}
-            className="w-full px-4 py-3 rounded-xl border border-zinc-200 focus:border-black focus:ring-2 focus:ring-black/5 outline-none transition-all font-semibold placeholder:text-zinc-400 bg-zinc-50"
+            className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-zinc-800 focus:border-indigo-600 dark:focus:border-cyan-400 focus:ring-2 focus:ring-indigo-600/5 dark:focus:ring-cyan-400/5 outline-none transition-all font-semibold placeholder:text-slate-400 dark:placeholder:text-zinc-500 bg-slate-50/50 dark:bg-zinc-900/50 text-slate-800 dark:text-zinc-100"
           />
           <div className="relative">
             <input
@@ -86,12 +86,12 @@ const Login = () => {
               required
               value={formData.password}
               onChange={handleChange}
-              className="w-full px-4 py-3 rounded-xl border border-zinc-200 focus:border-black focus:ring-2 focus:ring-black/5 outline-none transition-all font-semibold placeholder:text-zinc-400 bg-zinc-50"
+              className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-zinc-800 focus:border-indigo-600 dark:focus:border-cyan-400 focus:ring-2 focus:ring-indigo-600/5 dark:focus:ring-cyan-400/5 outline-none transition-all font-semibold placeholder:text-slate-400 dark:placeholder:text-zinc-500 bg-slate-50/50 dark:bg-zinc-900/50 text-slate-800 dark:text-zinc-100"
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-black transition-colors p-1"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-zinc-500 hover:text-slate-800 dark:hover:text-zinc-300 transition-colors p-1 cursor-pointer"
               aria-label={showPassword ? "Hide password" : "Show password"}
             >
               {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
@@ -100,16 +100,16 @@ const Login = () => {
 
           <button
             type="submit"
-            className="w-full bg-black text-white border border-black py-4 font-black uppercase tracking-widest rounded-xl hover:bg-white hover:text-black transition-all duration-300 mt-4 shadow-[0_10px_30px_rgba(0,0,0,0.2)] active:scale-95"
+            className="w-full bg-zinc-900 text-white dark:bg-white dark:text-black border border-zinc-900 dark:border-white py-4 font-black uppercase tracking-widest rounded-xl hover:bg-indigo-600 hover:text-white hover:border-indigo-600 dark:hover:bg-zinc-900 dark:hover:text-white dark:hover:border-zinc-800 transition-all duration-300 mt-4 shadow-md dark:shadow-[0_10px_30px_rgba(0,0,0,0.15)] active:scale-95 cursor-pointer"
           >
             Enter the Void
           </button>
         </form>
 
-        <p className="text-center text-xs font-bold text-zinc-400 uppercase tracking-widest">
+        <p className="text-center text-xs font-bold text-slate-400 dark:text-zinc-500 uppercase tracking-widest">
           New here?{" "}
-          <Link to="/signup" className="text-black  underline">
-            Sign In
+          <Link to="/signup" className="text-indigo-600 dark:text-cyan-400 hover:underline font-bold transition-all ml-1">
+            Sign Up
           </Link>
         </p>
       </div>

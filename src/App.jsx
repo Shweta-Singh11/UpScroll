@@ -22,9 +22,9 @@ function App() {
   return (
     <Router>
       
-      <div className="min-h-screen w-full bg-[#050505] text-white selection:bg-blue-500/30">
+      <div className="min-h-screen w-full bg-gradient-to-b from-slate-50 via-slate-100/70 to-slate-50 dark:from-[#090a15] dark:via-[#0f1122] dark:to-[#080914] text-zinc-800 dark:text-zinc-100 transition-all duration-500 selection:bg-blue-500/30 selection:text-white">
         <Navbar/>
-        <main className="w-full ">
+        <main className="w-full">
           <Routes>
             <Route path="/" element={<Home />} /> 
             <Route path="/signup" element={<SignUp />} />

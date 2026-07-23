@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Send, Image as ImageIcon } from "lucide-react";
+import { Send, Image as ImageIcon, ArrowLeft } from "lucide-react";
 import meme from "../../assets/meme.png";
 import political_humour from "../../assets/political_humour.png";
 import nature from "../../assets/nature.png";
@@ -50,7 +50,7 @@ const categories = [
   {
     id: "adult",
     title: "Explicit Content",
-    desc: "Dive into spicy humor.Mature content ahead. Click responsibly.",
+    desc: "Dive into spicy humor. Mature content ahead. Click responsibly.",
     image: adult,
   },
   {
@@ -111,7 +111,7 @@ const CaptionWriting = () => {
           {
             method: "POST",
             body: formData,
-          },
+          }
         );
 
         if (response.ok) {
@@ -132,7 +132,7 @@ const CaptionWriting = () => {
         `${import.meta.env.VITE_API_BASE_URL}/api/captions/image?category=${activity.title}&email=${currentEmail}`,
         {
           method: "GET",
-        },
+        }
       );
       const data = await response.json();
       setCurrentImg({ id: data.imageId, url: data.imageUrl });
@@ -162,7 +162,7 @@ const CaptionWriting = () => {
         {
           method: "POST",
           body: formData,
-        },
+        }
       );
 
       if (!response.ok) {
@@ -177,9 +177,7 @@ const CaptionWriting = () => {
       setIsSyncing(false);
     }
   };
-  {
-    /*breathing logic*/
-  }
+
   useEffect(() => {
     if (specialEvent === "meditation") {
       const sequence = ["Breathe In", "Hold", "Breathe Out"];
@@ -198,15 +196,15 @@ const CaptionWriting = () => {
   }, [specialEvent]);
 
   return (
-    <div className="min-h-screen pt-24 pb-12 px-6 bg-linear-to-r from-[#0d1322] to-[#1a284a] text-white">
+    <div className="min-h-screen pt-28 pb-16 px-6 bg-transparent text-slate-800 dark:text-zinc-100 transition-colors duration-300">
       {/* meditation */}
       {specialEvent === "meditation" && (
-        <div className="fixed inset-0 z-100 bg-[#050505] flex flex-col items-center justify-center animate-in fade-in duration-1000">
+        <div className="fixed inset-0 z-100 bg-slate-50 dark:bg-[#050505] flex flex-col items-center justify-center animate-in fade-in duration-1000 text-slate-800 dark:text-white">
           <div className="text-center mb-12">
-            <h2 className="text-3xl text-cyan-500 font-black uppercase tracking-[0.2em]">
+            <h2 className="text-3xl text-indigo-600 dark:text-cyan-500 font-black uppercase tracking-[0.2em]">
               Congrats! +50 Aura Points
             </h2>
-            <div className="mt-4 text-2xl text-white font-mono">
+            <div className="mt-4 text-2xl font-mono font-bold">
               Total Aura Points: {feedback?.totalAuraPoints || "Loading..."}
             </div>
           </div>
@@ -214,7 +212,7 @@ const CaptionWriting = () => {
           <div className="relative flex items-center justify-center">
             {/* Outer Glow */}
             <div
-              className="absolute rounded-full bg-cyan-500/10 blur-3xl transition-all duration-4000 ease-in-out"
+              className="absolute rounded-full bg-indigo-500/10 dark:bg-cyan-500/10 blur-3xl transition-all duration-4000 ease-in-out"
               style={{
                 width:
                   phase === "Breathe In" || phase === "Hold"
@@ -229,44 +227,44 @@ const CaptionWriting = () => {
             ></div>
             {/* Breathing Circle */}
             <div
-              className="bg-linear-to-br from-cyan-400 to-blue-600 rounded-full flex flex-col items-center justify-center shadow-[0_0_80px_rgba(34,211,238,0.3)] transition-all duration-4000 ease-in-out"
+              className="bg-gradient-to-br from-indigo-500 via-blue-600 to-indigo-700 dark:from-cyan-400 dark:to-blue-600 rounded-full flex flex-col items-center justify-center shadow-[0_0_80px_rgba(79,70,229,0.2)] dark:shadow-[0_0_80px_rgba(34,211,238,0.3)] transition-all duration-4000 ease-in-out"
               style={{
                 width:
                   phase === "Breathe In" || phase === "Hold" ? "12rem" : "8rem",
                 height:
                   phase === "Breathe In" || phase === "Hold" ? "12rem" : "8rem",
-                transform: phase === "Hold" ? "scale(1.1)" : "scale(1)", // Subtle pulse during hold
+                transform: phase === "Hold" ? "scale(1.1)" : "scale(1)",
               }}
             >
-              <span className="text-black font-black uppercase text-xs tracking-widest">
+              <span className="text-white dark:text-black font-black uppercase text-xs tracking-widest">
                 {phase}
               </span>
-              <div className="w-8 h-px bg-black/20 my-2"></div>
+              <div className="w-8 h-px bg-white/20 dark:bg-black/20 my-2"></div>
             </div>
           </div>
 
           {/*Visual Steps*/}
           <div className="mt-24 flex gap-8 items-center justify-center">
             <div
-              className={`transition-opacity duration-500 ${phase === "Breathe In" ? "opacity-100 scale-110" : "opacity-20 scale-100"}`}
+              className={`transition-opacity duration-500 ${phase === "Breathe In" ? "opacity-100 scale-110 font-bold" : "opacity-20 scale-100"}`}
             >
-              <p className="text-cyan-400 font-black text-[20px] uppercase tracking-widest">
+              <p className="text-indigo-600 dark:text-cyan-400 font-black text-[20px] uppercase tracking-widest">
                 Inhale
               </p>
             </div>
-            <div className="w-2 h-2 bg-zinc-800 rounded-full"></div>
+            <div className="w-2 h-2 bg-slate-300 dark:bg-zinc-800 rounded-full"></div>
             <div
-              className={`transition-opacity duration-500 ${phase === "Hold" ? "opacity-100 scale-110" : "opacity-20 scale-100"}`}
+              className={`transition-opacity duration-500 ${phase === "Hold" ? "opacity-100 scale-110 font-bold" : "opacity-20 scale-100"}`}
             >
-              <p className="text-cyan-400 font-black text-[20px] uppercase tracking-widest">
+              <p className="text-indigo-600 dark:text-cyan-400 font-black text-[20px] uppercase tracking-widest">
                 Hold
               </p>
             </div>
-            <div className="w-2 h-2 bg-zinc-800 rounded-full"></div>
+            <div className="w-2 h-2 bg-slate-300 dark:bg-zinc-800 rounded-full"></div>
             <div
-              className={`transition-opacity duration-500 ${phase === "Breathe Out" ? "opacity-100 scale-110" : "opacity-20 scale-100"}`}
+              className={`transition-opacity duration-500 ${phase === "Breathe Out" ? "opacity-100 scale-110 font-bold" : "opacity-20 scale-100"}`}
             >
-              <p className="text-cyan-400 font-black text-[20px] uppercase tracking-widest">
+              <p className="text-indigo-600 dark:text-cyan-400 font-black text-[20px] uppercase tracking-widest">
                 Exhale
               </p>
             </div>
@@ -277,7 +275,7 @@ const CaptionWriting = () => {
               setSpecialEvent(null);
               setPhase("Inhale");
             }}
-            className="mt-20 px-12 py-4 border border-white/5 rounded-full text-[12px] font-black uppercase tracking-[0.3em] text-zinc-500 hover:text-white hover:bg-cyan-600 transition-all"
+            className="mt-20 px-12 py-4 border border-slate-200 dark:border-white/5 rounded-full text-[12px] font-black uppercase tracking-[0.3em] text-slate-500 dark:text-zinc-500 hover:text-indigo-600 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-cyan-600/20 transition-all cursor-pointer"
           >
             Claim & Exit
           </button>
@@ -285,39 +283,38 @@ const CaptionWriting = () => {
       )}
       {/* adult only */}
       {specialEvent === "caught" && (
-        <div className="fixed inset-0 z-50 bg-red-600/20 backdrop-blur-md flex flex-col items-center justify-center p-6 animate-flash-red">
-          <div className="absolute inset-0 bg-red-600/10 animate-pulse pointer-events-none" />
+        <div className="fixed inset-0 z-50 bg-red-600/10 dark:bg-red-600/20 backdrop-blur-md flex flex-col items-center justify-center p-6 text-slate-800 dark:text-white">
+          <div className="absolute inset-0 bg-red-600/5 dark:bg-red-600/10 animate-pulse pointer-events-none" />
 
-          <div className="relative bg-zinc-950 p-1 rounded-[4rem] border border-red-500/30 shadow-[0_0_80px_rgba(220,38,38,0.3)] group">
+          <div className="relative bg-white dark:bg-zinc-950 p-1 rounded-[4rem] border border-red-500/30 shadow-[0_0_80px_rgba(220,38,38,0.2)] dark:shadow-[0_0_80px_rgba(220,38,38,0.3)] group">
             {/* Inner Border */}
-            <div className="bg-black px-16 py-20 rounded-[3.8rem] border-4 border-red-600 flex flex-col items-center text-center">
-              <h2 className="text-8xl font-black italic uppercase text-transparent bg-clip-text bg-linear-to-b from-red-500 to-red-800 mb-2 animate-bounce drop-shadow-[0_0_15px_rgba(220,38,38,0.8)]">
+            <div className="bg-slate-50 dark:bg-black px-16 py-20 rounded-[3.8rem] border-4 border-red-600 flex flex-col items-center text-center">
+              <h2 className="text-8xl font-black italic uppercase text-red-600 dark:text-transparent dark:bg-clip-text dark:bg-gradient-to-b dark:from-red-500 dark:to-red-800 mb-2 animate-bounce drop-shadow-[0_0_15px_rgba(220,38,38,0.6)]">
                 CAUGHT!
               </h2>
 
               <p className="text-red-500/80 font-black uppercase tracking-[0.3em] text-sm mb-12">
-                Captured in 4K •{" "}
-                <span className="text-white">-50 Aura Points</span>
+                Captured in 4K • <span className="text-slate-900 dark:text-white font-bold">-50 Aura Points</span>
               </p>
 
               {/* Aura Display Card */}
-              <div className="bg-zinc-900/50 border border-white/5 px-8 py-4 rounded-2xl mb-12 backdrop-blur-sm">
-                <span className="block text-zinc-500 text-[15px] uppercase tracking-widest mb-1">
+              <div className="bg-white dark:bg-zinc-900/50 border border-slate-200 dark:border-white/5 px-8 py-4 rounded-2xl mb-12 backdrop-blur-sm shadow-sm">
+                <span className="block text-slate-500 dark:text-zinc-500 text-[15px] uppercase tracking-widest mb-1">
                   Total Aura Points
                 </span>
-                <div className="text-3xl text-white font-mono font-bold flex items-center gap-3">
+                <div className="text-3xl text-slate-900 dark:text-white font-mono font-bold flex items-center gap-3 justify-center">
                   {feedback?.totalAuraPoints || "Loading..."}
-                  <span className="text-zinc-600 text-sm">pts</span>
+                  <span className="text-slate-400 dark:text-zinc-600 text-sm">pts</span>
                 </div>
               </div>
 
               {/* Action Button */}
               <button
                 onClick={() => setSpecialEvent(null)}
-                className="group relative px-16 py-6 bg-red-600 overflow-hidden rounded-2xl font-black uppercase tracking-widest text-white transition-all hover:scale-105 active:scale-95 shadow-[0_0_40px_rgba(220,38,38,0.6)]"
+                className="group relative px-16 py-6 bg-red-600 overflow-hidden rounded-2xl font-black uppercase tracking-widest text-white transition-all hover:scale-105 active:scale-95 shadow-[0_0_40px_rgba(220,38,38,0.4)] cursor-pointer"
               >
                 <span className="relative z-10">Surrender</span>
-                <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-shimmer" />
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-shimmer" />
               </button>
             </div>
           </div>
@@ -326,15 +323,15 @@ const CaptionWriting = () => {
 
       <div className="max-w-7xl mx-auto">
         {!selectedCtg ? (
-          <div className="w-full max-w-400 mx-auto animate-in fade-in slide-in-from-bottom-4">
-            <h1 className="text-6xl md:text-7xl font-black uppercase italic text-center tracking-tighter leading-[0.8] mb-4">
+          <div className="w-full max-w-6xl mx-auto animate-in fade-in slide-in-from-bottom-4">
+            <h1 className="text-5xl md:text-7xl font-black uppercase italic text-center tracking-tighter leading-[0.9] mb-4">
               Caption{" "}
-              <span className="bg-linear-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent pr-4">
+              <span className="bg-gradient-to-r from-indigo-600 to-blue-500 dark:from-cyan-400 dark:to-blue-400 bg-clip-text text-transparent pr-4">
                 writing
               </span>
             </h1>
             <header className="text-center mb-16 mt-8">
-              <p className="text-zinc-400 text-3xl md:text-4xl font-black max-w-3xl mx-auto leading-none mb-8">
+              <p className="text-slate-600 dark:text-zinc-400 text-3xl md:text-4xl font-black max-w-3xl mx-auto leading-none mb-8">
                 Select a Category
               </p>
             </header>
@@ -343,10 +340,10 @@ const CaptionWriting = () => {
                 <div
                   key={activity.id}
                   onClick={() => handleFetchImg(activity)}
-                  className="group cursor-pointer bg-[#111] border-2 border-white/5 rounded-[2.5rem] overflow-hidden transition-all duration-500 hover:border-cyan-500/50 hover:scale-105 hover:shadow-[0_0_30px_-10px_rgba(34,211,238,0.3)] flex flex-col h-full"
+                  className="group cursor-pointer bg-white dark:bg-zinc-900/40 border border-slate-200 dark:border-zinc-800/80 rounded-[2.5rem] overflow-hidden transition-all duration-500 hover:border-indigo-500 dark:hover:border-cyan-400 hover:scale-105 hover:shadow-xl flex flex-col h-full"
                 >
                   {/* THE IMAGE SECTION */}
-                  <div className="h-52 overflow-hidden ">
+                  <div className="h-52 overflow-hidden relative">
                     <img
                       src={activity.image}
                       alt={activity.title}
@@ -355,16 +352,16 @@ const CaptionWriting = () => {
                   </div>
 
                   {/* THE TEXT SECTION */}
-                  <div className="p-7 flex flex-col grow text-left bg-linear-to-b from-[#111] to-[#0a0a0a]">
-                    <h3 className="text-2xl font-black uppercase italic mb-3 text-white group-hover:text-cyan-400 transition-colors tracking-tighter">
+                  <div className="p-7 flex flex-col grow text-left bg-white dark:bg-zinc-900/40 border-t border-slate-100 dark:border-zinc-800/50">
+                    <h3 className="text-2xl font-black uppercase italic mb-3 text-slate-800 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-cyan-400 transition-colors tracking-tighter">
                       {activity.title}
                     </h3>
-                    <p className="text-sm text-zinc-400 leading-relaxed font-medium">
+                    <p className="text-sm text-slate-500 dark:text-zinc-400 leading-relaxed font-medium">
                       {activity.desc}
                     </p>
 
                     <div className="mt-auto pt-6 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      <div className="grow h-px bg-cyan-900"></div>
+                      <div className="grow h-px bg-indigo-100 dark:bg-cyan-900/50"></div>
                     </div>
                   </div>
                 </div>
@@ -372,37 +369,37 @@ const CaptionWriting = () => {
             </div>
           </div>
         ) : (
-          <div className="max-w-7xl mx-auto animate-in zoom-in duration-500 px-4">
+          <div className="max-w-6xl mx-auto animate-in zoom-in duration-500 px-4">
             {/*Category Name */}
             <header className="mb-16 text-center">
-              <h1 className="text-6xl font-black italic uppercase tracking-tighter text-white">
-                Category: <span className="text-cyan-500">{selectedCtg}</span>
+              <h1 className="text-4xl md:text-6xl font-black italic uppercase tracking-tighter text-slate-900 dark:text-white">
+                Category: <span className="text-indigo-600 dark:text-cyan-400">{selectedCtg}</span>
               </h1>
-              <div className="h-1.5 w-82 bg-cyan-500 mx-auto mt-6 rounded-full shadow-[0_0_20px_rgba(34,211,238,0.6)]"></div>
+              <div className="h-1.5 w-82 bg-indigo-600 dark:bg-cyan-500 mx-auto mt-6 rounded-full shadow-[0_0_20px_rgba(99,102,241,0.2)] dark:shadow-[0_0_20px_rgba(34,211,238,0.6)]"></div>
             </header>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-stretch">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
               {/*Fetched Image Area */}
-              <div className="relative overflow-hidden flex items-center justify-center ">
+              <div className="relative overflow-hidden flex items-center justify-center bg-white dark:bg-zinc-900/20 p-4 rounded-3xl border border-slate-200 dark:border-zinc-800/80 shadow-md">
                 {currentImg ? (
                   <img
                     src={currentImg.url}
                     alt="Neural Target"
-                    className="w-full h-auto max-h-150 object-contain transition-transform duration-700"
+                    className="w-full h-auto max-h-[500px] object-contain rounded-2xl"
                   />
                 ) : (
-                  <div className="h-150 w-full flex items-center justify-center">
-                    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-cyan-500"></div>
+                  <div className="h-[400px] w-full flex items-center justify-center">
+                    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-indigo-600 dark:border-cyan-500"></div>
                   </div>
                 )}
               </div>
 
               {/* User Input*/}
               <div className="space-y-6">
-                <div className="bg-[#111]/50 backdrop-blur-2xl border border-white/5 p-8 rounded-[3rem] shadow-xl">
+                <div className="bg-white dark:bg-zinc-900/40 backdrop-blur-2xl border border-slate-200 dark:border-zinc-800/80 p-8 rounded-[3rem] shadow-xl">
                   <label
                     htmlFor="caption-neural-input"
-                    className="block text-[12px] font-black uppercase tracking-[0.2em] text-zinc-500 mb-4"
+                    className="block text-[12px] font-black uppercase tracking-[0.2em] text-slate-400 dark:text-zinc-500 mb-4"
                   >
                     Enter the Caption
                   </label>
@@ -412,7 +409,7 @@ const CaptionWriting = () => {
                     value={caption}
                     onChange={(e) => setCaption(e.target.value)}
                     placeholder="Compose high-impact caption here..."
-                    className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-md text-white placeholder:text-zinc-700 focus:outline-none focus:border-cyan-500/50 min-h-40 transition-all resize-none"
+                    className="w-full bg-slate-50 dark:bg-zinc-900/50 border border-slate-200 dark:border-zinc-800/80 rounded-2xl p-4 text-md text-slate-800 dark:text-zinc-100 placeholder:text-slate-400 dark:placeholder:text-zinc-600 focus:outline-none focus:border-indigo-600 dark:focus:border-cyan-500 focus:ring-2 focus:ring-indigo-600/5 dark:focus:ring-cyan-500/5 min-h-40 transition-all resize-none"
                   />
 
                   <div className="flex flex-col sm:flex-row gap-4 mt-6">
@@ -420,16 +417,16 @@ const CaptionWriting = () => {
                     <button
                       onClick={handleSubmitCaption}
                       disabled={isSyncing || caption.length > 300}
-                      className="grow flex items-center justify-center gap-1 px-6 py-4 bg-white text-black rounded-2xl font-black uppercase tracking-widest hover:bg-cyan-400 transition-all active:scale-95 disabled:opacity-20"
+                      className="grow flex items-center justify-center gap-2 px-6 py-4 bg-zinc-900 text-white dark:bg-white dark:text-black rounded-2xl font-black uppercase tracking-widest hover:bg-indigo-600 dark:hover:bg-cyan-400 dark:hover:text-black transition-all active:scale-95 disabled:opacity-20 cursor-pointer shadow-md"
                     >
                       {isSyncing ? "Analysing..." : "Submit Caption"}
-                      <Send size={24} />
+                      <Send size={18} />
                     </button>
 
                     {/* Aura Points Button */}
                     <button
                       disabled={!feedback}
-                      className="px-8 py-5 bg-zinc-900 text-zinc-400 border border-white/5 rounded-2xl font-black uppercase tracking-widest hover:text-black hover:bg-white hover:border-zinc-400 transition-all disabled:opacity-20"
+                      className="px-8 py-5 bg-slate-100 text-slate-600 dark:bg-zinc-900 dark:text-zinc-400 border border-slate-200 dark:border-white/5 rounded-2xl font-black uppercase tracking-widest hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-zinc-800 transition-all disabled:opacity-20 cursor-pointer"
                     >
                       {feedback?.totalAuraPoints
                         ? `Total Aura Points: ${feedback.totalAuraPoints}`
@@ -440,29 +437,29 @@ const CaptionWriting = () => {
 
                 {/*Feedback */}
                 {feedback && (
-                  <div className=" mt-4 bg-[#0c0c0e] border border-cyan-500/30 p-4 rounded-4xl animate-in fade-in zoom-in duration-500 shadow-2xl overflow-hidden max-w-full">
-                    <div className="flex justify-between items-start mb-6 border-b border-white/5 pb-4">
+                  <div className="mt-4 bg-white dark:bg-zinc-900/40 border border-indigo-500/20 dark:border-cyan-500/30 p-6 rounded-[2.5rem] shadow-2xl animate-in fade-in zoom-in duration-500 overflow-hidden max-w-full text-slate-800 dark:text-zinc-100">
+                    <div className="flex justify-between items-start mb-6 border-b border-slate-100 dark:border-white/5 pb-4">
                       <div>
-                        <h4 className="text-cyan-500 font-black uppercase text-[10px] tracking-[0.2em]">
+                        <h4 className="text-indigo-600 dark:text-cyan-500 font-black uppercase text-[10px] tracking-[0.2em]">
                           Caption Analysis Completed
                         </h4>
-                        <p className="text-zinc-500 text-[10px] uppercase font-bold">
+                        <p className="text-slate-400 dark:text-zinc-500 text-[10px] uppercase font-bold">
                           Category: {selectedCtg}
                         </p>
                       </div>
                       <div className="flex flex-col items-center ">
-                        <p className="text-zinc-500 text-[10px] font-black uppercase mb-1">
+                        <p className="text-slate-400 dark:text-zinc-500 text-[10px] font-black uppercase mb-1">
                           Aura Gained
                         </p>
-                        <p className="text-white font-black text-3xl tracking-tighter">
+                        <p className="text-slate-950 dark:text-white font-black text-3xl tracking-tighter">
                           {feedback.auraGained} /{" "}
-                          <span className="text-2xs text-zinc-700">60</span>
+                          <span className="text-2xs text-slate-400 dark:text-zinc-700">60</span>
                         </p>
                       </div>
                     </div>
                     {/* Feedback Text */}
-                    <div className=" p-4 bg-cyan-500/5 rounded-xl border-l-4 mb-6 border-cyan-500">
-                      <p className="text-zinc-300 italic text-sm leading-snug font-medium">
+                    <div className="p-4 bg-indigo-50 dark:bg-cyan-500/5 rounded-2xl border-l-4 mb-6 border-indigo-600 dark:border-cyan-500">
+                      <p className="text-slate-700 dark:text-zinc-300 italic text-sm leading-snug font-medium">
                         "{feedback.feedback}"
                       </p>
                     </div>
@@ -491,24 +488,24 @@ const CaptionWriting = () => {
                         <div
                           key={stat.label}
                           style={{ animationDelay: `${index * 100}ms` }}
-                          className={`bg-white/5 p-3 rounded-xl border border-white/5 flex flex-col justify-between animate-in fade-in slide-in-from-bottom-2 duration-500 fill-mode-both
+                          className={`bg-slate-50 dark:bg-zinc-900/50 p-3 rounded-xl border border-slate-200 dark:border-zinc-800/80 flex flex-col justify-between animate-in fade-in slide-in-from-bottom-2 duration-500 fill-mode-both
                             ${index === 4 ? "col-span-2 md:col-span-1" : "col-span-1"}`}
                         >
-                          <p className="text-[8px] font-black uppercase text-zinc-500 tracking-widest ">
+                          <p className="text-[8px] font-black uppercase text-slate-400 dark:text-zinc-500 tracking-widest ">
                             {stat.label}
                           </p>
                           <div className="flex items-baseline gap-1 mt-1">
-                            <p className="text-lg font-black text-white">
+                            <p className="text-lg font-black text-slate-900 dark:text-white">
                               {stat.val}
                             </p>
-                            <span className="text-[10px] font-bold text-zinc-700">
+                            <span className="text-[10px] font-bold text-slate-400 dark:text-zinc-700">
                               /{stat.max}
                             </span>
                           </div>
 
-                          <div className="w-full h-1 bg-zinc-800 mt-2 rounded-full overflow-hidden">
+                          <div className="w-full h-1 bg-slate-200 dark:bg-zinc-800 mt-2 rounded-full overflow-hidden">
                             <div
-                              className="h-full bg-cyan-500 transition-all duration-1000"
+                              className="h-full bg-indigo-600 dark:bg-cyan-500 transition-all duration-1000"
                               style={{
                                 width: `${(stat.val / (typeof stat.max === "number" ? stat.max : 100)) * 100}%`,
                               }}
@@ -519,14 +516,13 @@ const CaptionWriting = () => {
                     </div>
                     {/* check signup */}
                     {feedback && (!email || email === "") && (
-                      <div className="mt-8 p-6 bg-cyan-500/5 border border-cyan-500/20 rounded-3xl animate-in fade-in slide-in-from-bottom-2 text-center">
-                        <p className="text-[10px] font-black text-cyan-400 uppercase tracking-[0.2em] mb-4">
-                          To permanently save these {feedback.auraGained} Aura
-                          Points
+                      <div className="mt-8 p-6 bg-indigo-50 dark:bg-cyan-500/5 border border-indigo-200 dark:border-cyan-500/20 rounded-3xl animate-in fade-in slide-in-from-bottom-2 text-center">
+                        <p className="text-[10px] font-black text-indigo-600 dark:text-cyan-400 uppercase tracking-[0.2em] mb-4">
+                          To permanently save these {feedback.auraGained} Aura Points
                         </p>
                         <button
                           onClick={() => navigate("/signup")}
-                          className="px-10 py-3 bg-cyan-500 text-black text-[11px] font-black uppercase tracking-widest rounded-xl hover:bg-white transition-all shadow-[0_5px_15px_rgba(34,211,238,0.3)]"
+                          className="px-10 py-3 bg-indigo-600 dark:bg-cyan-500 text-white dark:text-black text-[11px] font-black uppercase tracking-widest rounded-xl hover:bg-indigo-700 dark:hover:bg-white transition-all shadow-md cursor-pointer"
                         >
                           Sign Up Now
                         </button>
@@ -543,20 +539,19 @@ const CaptionWriting = () => {
                 setSelectedCtg(null);
                 setFeedback(null);
               }}
-              className="mt-16 mx-auto flex items-center gap-2 text-white hover:text-cyan-500 transition-colors uppercase font-black text-[15px] tracking-widest"
+              className="mt-16 mx-auto flex items-center gap-2 text-slate-800 dark:text-white hover:text-indigo-600 dark:hover:text-cyan-400 transition-colors uppercase font-black text-[15px] tracking-widest cursor-pointer"
             >
-              <div className="w-8 h-px bg-white"></div>
+              <div className="w-8 h-px bg-slate-800 dark:bg-white"></div>
               Change Category
             </button>
           </div>
         )}
 
         {/* back */}
-
         <footer className="mt-15 text-center">
           <button
             onClick={() => navigate("/")}
-            className="px-8 py-3 rounded-full border-3 border-zinc-800 text-zinc-500 hover:text-white hover:bg-blue-500 hover:border-blue-900 hover:border-3 transition-all text-sm font-bold uppercase tracking-widest"
+            className="px-8 py-3 rounded-full border border-slate-300 dark:border-zinc-800 text-slate-600 dark:text-zinc-400 hover:text-indigo-600 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-zinc-900/60 transition-all text-sm font-bold uppercase tracking-widest cursor-pointer"
           >
             ← Back to Dashboard
           </button>
