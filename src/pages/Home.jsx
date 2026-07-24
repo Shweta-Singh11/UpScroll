@@ -98,10 +98,11 @@ const FAQItem = ({ question, answer }) => {
         className="w-full py-5 flex justify-between items-center text-left focus:outline-none group cursor-pointer"
       >
         <span
-          className={`text-base md:text-lg font-bold transition-all duration-300 ${isOpen
-            ? "text-indigo-600 dark:text-cyan-400 translate-x-1"
-            : "text-slate-800 dark:text-zinc-100 group-hover:text-indigo-500 dark:group-hover:text-cyan-300"
-            }`}
+          className={`text-base md:text-lg font-bold transition-all duration-300 ${
+            isOpen
+              ? "text-indigo-600 dark:text-cyan-400 translate-x-1"
+              : "text-slate-800 dark:text-zinc-100 group-hover:text-indigo-500 dark:group-hover:text-cyan-300"
+          }`}
         >
           {question}
         </span>
@@ -109,17 +110,19 @@ const FAQItem = ({ question, answer }) => {
           className={`p-1.5 rounded-full transition-colors duration-300 ${isOpen ? "bg-indigo-50 dark:bg-cyan-950/40" : "bg-transparent"}`}
         >
           <ChevronDown
-            className={`transform transition-transform duration-300 ${isOpen
-              ? "rotate-180 text-indigo-600 dark:text-cyan-400"
-              : "text-slate-400 dark:text-zinc-500"
-              }`}
+            className={`transform transition-transform duration-300 ${
+              isOpen
+                ? "rotate-180 text-indigo-600 dark:text-cyan-400"
+                : "text-slate-400 dark:text-zinc-500"
+            }`}
             size={18}
           />
         </div>
       </button>
       <div
-        className={`overflow-hidden transition-[max-height,padding] duration-200 ease-out ${isOpen ? "max-h-96 pb-6" : "max-h-0 pb-0"
-          }`}
+        className={`overflow-hidden transition-[max-height,padding] duration-200 ease-out ${
+          isOpen ? "max-h-96 pb-6" : "max-h-0 pb-0"
+        }`}
       >
         <p className="text-slate-600 dark:text-zinc-400 leading-relaxed border-l-2 border-indigo-500/50 dark:border-cyan-500/50 pl-4 text-sm md:text-base">
           {answer}
@@ -324,16 +327,16 @@ const Home = () => {
   return (
     <div
       onMouseMove={handleMouseMove}
-      className="min-h-screen bg-gradient-to-b from-[#F3F7FA] via-[#ECF2F6] to-[#F3F7FA] dark:from-[#0B0D19] dark:via-[#111326] dark:to-[#0B0D19] text-slate-800 dark:text-zinc-100 transition-colors duration-500 relative overflow-hidden"
+      className="min-h-screen bg-linear-to-b from-[#F3F7FA] via-[#ECF2F6] to-[#F3F7FA] dark:from-[#0B0D19] dark:via-[#111326] dark:to-[#0B0D19] text-slate-800 dark:text-zinc-100 transition-colors duration-500 relative overflow-hidden"
     >
       {/* Noise filter */}
       <div className="noise-overlay" />
 
       {/* Glow Orbs - Continuous Premium Canvas */}
-      <div className="absolute top-[5%] left-[5%] w-[45rem] h-[45rem] rounded-full bg-indigo-300/15 dark:bg-indigo-950/20 blur-[130px] animate-pulse-soft pointer-events-none z-0"></div>
-      <div className="absolute top-[30%] right-[-5%] w-[40rem] h-[40rem] rounded-full bg-cyan-300/15 dark:bg-cyan-950/15 blur-[120px] pointer-events-none z-0"></div>
-      <div className="absolute top-[55%] left-[-10%] w-[35rem] h-[35rem] rounded-full bg-violet-300/15 dark:bg-violet-950/15 blur-[110px] pointer-events-none z-0"></div>
-      <div className="absolute bottom-[5%] right-[5%] w-[45rem] h-[45rem] rounded-full bg-teal-300/15 dark:bg-teal-950/20 blur-[140px] pointer-events-none z-0"></div>
+      <div className="absolute top-[5%] left-[5%] w-180 h-180 rounded-full bg-indigo-300/15 dark:bg-indigo-950/20 blur-[130px] animate-pulse-soft pointer-events-none z-0"></div>
+      <div className="absolute top-[30%] right-[-5%] w-160 h-160 rounded-full bg-cyan-300/15 dark:bg-cyan-950/15 blur-[120px] pointer-events-none z-0"></div>
+      <div className="absolute top-[55%] left-[-10%] w-140 h-140 rounded-full bg-violet-300/15 dark:bg-violet-950/15 blur-[110px] pointer-events-none z-0"></div>
+      <div className="absolute bottom-[5%] right-[5%] w-180 h-180 rounded-full bg-teal-300/15 dark:bg-teal-950/20 blur-[140px] pointer-events-none z-0"></div>
 
       {/* HERO SECTION */}
       <section className="relative min-h-screen flex items-center justify-center pt-32 pb-20 px-6 md:px-12 lg:px-20 z-10 max-w-7xl mx-auto">
@@ -350,7 +353,7 @@ const Home = () => {
             <div className="space-y-4">
               <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.05]">
                 Break the scroll. <br />
-                <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-cyan-500 dark:from-cyan-400 dark:via-blue-400 dark:to-indigo-400 bg-clip-text text-transparent italic tracking-tight font-black">
+                <span className="bg-linear-to-r from-indigo-600 via-violet-600 to-cyan-500 dark:from-cyan-400 dark:via-blue-400 dark:to-indigo-400 bg-clip-text text-transparent italic tracking-tight font-black">
                   Reclaim your mind.
                 </span>
               </h1>
@@ -363,7 +366,7 @@ const Home = () => {
           </div>
 
           {/* Right Column - 3D Floating Illustration */}
-          <div className="lg:col-span-6 relative flex items-center justify-center min-h-[450px]">
+          <div className="lg:col-span-6 relative flex items-center justify-center min-h-112.5">
             {/* Animated background rings */}
             <div
               style={{
@@ -377,7 +380,7 @@ const Home = () => {
                 transform: `rotateX(-45deg) rotateY(-30deg) translate3d(calc(${mouseOffset.x} * 15px), calc(${mouseOffset.y} * 15px), 0)`,
                 transition: "transform 0.2s ease-out",
               }}
-              className="absolute w-[360px] h-[360px] rounded-full border border-violet-500/10 dark:border-indigo-500/5 animate-ring-2"
+              className="absolute w-90 h-90 rounded-full border border-violet-500/10 dark:border-indigo-500/5 animate-ring-2"
             />
 
             {/* Glowing Brain Centerpiece */}
@@ -525,7 +528,7 @@ const Home = () => {
                 className={`absolute z-20 glass-panel hover:bg-white/80 dark:hover:bg-zinc-800/80 px-4 py-2.5 rounded-2xl border border-slate-200/50 dark:border-zinc-700/30 shadow-[0_12px_30px_rgba(0,0,0,0.03)] dark:shadow-[0_12px_30px_rgba(0,0,0,0.2)] cursor-pointer group hover:scale-105 transition-all duration-300 ${game.styleClass}`}
               >
                 <div
-                  className={`absolute inset-0 bg-gradient-to-tr ${game.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl`}
+                  className={`absolute inset-0 bg-linear-to-tr ${game.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl`}
                 />
                 <div className="relative flex items-center gap-2 select-none">
                   <Gamepad2
@@ -639,7 +642,7 @@ const Home = () => {
 
       {/* CALL TO ACTION (Conclusion of Journey) */}
       <section className="relative py-24 px-6 md:px-12 lg:px-20 max-w-7xl mx-auto z-10">
-        <div className="reveal-on-scroll relative rounded-[3rem] bg-gradient-to-br from-indigo-900 via-indigo-950 to-slate-950 dark:from-zinc-900 dark:via-[#0E1020] dark:to-zinc-950 p-12 md:p-20 text-center overflow-hidden border border-white/10 shadow-2xl">
+        <div className="reveal-on-scroll relative rounded-[3rem] bg-linear-to-br from-indigo-900 via-indigo-950 to-slate-950 dark:from-zinc-900 dark:via-[#0E1020] dark:to-zinc-950 p-12 md:p-20 text-center overflow-hidden border border-white/10 shadow-2xl">
           {/* Floating glowing circles / particles inside CTA */}
           <div className="absolute top-[10%] left-[20%] w-32 h-32 rounded-full bg-cyan-500/20 blur-[50px] animate-pulse pointer-events-none" />
           <div className="absolute bottom-[20%] right-[15%] w-48 h-48 rounded-full bg-indigo-500/20 blur-[70px] animate-pulse pointer-events-none" />
@@ -662,7 +665,7 @@ const Home = () => {
             <div className="pt-4">
               <button
                 onClick={() => navigate("/signup")}
-                className="btn-premium px-10 py-5 bg-gradient-to-r from-cyan-400 to-indigo-500 dark:from-cyan-500 dark:to-indigo-500 text-slate-950 dark:text-white font-extrabold text-xs uppercase tracking-widest rounded-full shadow-[0_15px_40px_rgba(34,211,238,0.2)] hover:scale-103 transition-all duration-300 cursor-pointer"
+                className="btn-premium px-10 py-5 bg-linear-to-r from-cyan-400 to-indigo-500 dark:from-cyan-500 dark:to-indigo-500 text-slate-950 dark:text-white font-extrabold text-xs uppercase tracking-widest rounded-full shadow-[0_15px_40px_rgba(34,211,238,0.2)] hover:scale-103 transition-all duration-300 cursor-pointer"
               >
                 Join UpScroll
               </button>
