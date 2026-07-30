@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://brain-backend-3.onrender.com";
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || "https://brain-backend-3.onrender.com";
 
 const AuthContainer = ({ initialView = "login" }) => {
   const navigate = useNavigate();
@@ -19,7 +20,7 @@ const AuthContainer = ({ initialView = "login" }) => {
     email: "",
     password: "",
     confirmPassword: "",
-    otp: ""
+    otp: "",
   });
 
   useEffect(() => {
@@ -42,7 +43,7 @@ const AuthContainer = ({ initialView = "login" }) => {
     setFormData((prev) => ({
       ...prev,
       confirmPassword: "",
-      otp: ""
+      otp: "",
     }));
   }, [currentView]);
 
@@ -106,12 +107,14 @@ const AuthContainer = ({ initialView = "login" }) => {
         body: JSON.stringify({
           username: formData.username.trim(),
           email: formData.email.trim(),
-          password: formData.password
+          password: formData.password,
         }),
       });
 
       if (response.ok) {
-        setMessage("Account created! Check your email for the verification code.");
+        setMessage(
+          "Account created! Check your email for the verification code.",
+        );
         setCurrentView("otp");
         setTimer(60);
       } else if (response.status === 409) {
@@ -120,7 +123,9 @@ const AuthContainer = ({ initialView = "login" }) => {
         setError("Registration failed. Please try again.");
       }
     } catch (err) {
-      setError("Server connection failed. Please check your internet connection.");
+      setError(
+        "Server connection failed. Please check your internet connection.",
+      );
     } finally {
       setIsLoading(false);
     }
@@ -148,7 +153,7 @@ const AuthContainer = ({ initialView = "login" }) => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           email: formData.email.trim(),
-          password: formData.password
+          password: formData.password,
         }),
       });
 
@@ -182,7 +187,9 @@ const AuthContainer = ({ initialView = "login" }) => {
         setError("Invalid credentials. Please verify your email and password.");
       }
     } catch (err) {
-      setError("Server connection failed. Please check your internet connection.");
+      setError(
+        "Server connection failed. Please check your internet connection.",
+      );
     } finally {
       setIsLoading(false);
     }
@@ -206,7 +213,7 @@ const AuthContainer = ({ initialView = "login" }) => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           email: formData.email.trim(),
-          otp: formData.otp.trim()
+          otp: formData.otp.trim(),
         }),
       });
 
@@ -233,7 +240,9 @@ const AuthContainer = ({ initialView = "login" }) => {
         setError("Invalid or expired verification code.");
       }
     } catch (err) {
-      setError("Server connection failed. Please check your internet connection.");
+      setError(
+        "Server connection failed. Please check your internet connection.",
+      );
     } finally {
       setIsLoading(false);
     }
@@ -260,7 +269,9 @@ const AuthContainer = ({ initialView = "login" }) => {
         setError("Failed to resend code. Please wait before trying again.");
       }
     } catch (err) {
-      setError("Server connection failed. Please check your internet connection.");
+      setError(
+        "Server connection failed. Please check your internet connection.",
+      );
     } finally {
       setIsLoading(false);
     }
@@ -274,7 +285,7 @@ const AuthContainer = ({ initialView = "login" }) => {
 
       <div className="max-w-md w-full relative z-10">
         {/* Centered Auth Card */}
-        <div className="bg-white/90 dark:bg-[#0c0d21]/80 backdrop-blur-md rounded-[2rem] p-8 md:p-12 border border-slate-100/50 dark:border-zinc-900/60 shadow-[0_25px_60px_rgba(0,0,0,0.03)] dark:shadow-[0_25px_60px_rgba(0,0,0,0.25)] transition-all duration-300">
+        <div className="bg-white/90 dark:bg-[#0c0d21]/80 backdrop-blur-md rounded-4xl p-8 md:p-12 border border-slate-100/50 dark:border-zinc-900/60 shadow-[0_25px_60px_rgba(0,0,0,0.03)] dark:shadow-[0_25px_60px_rgba(0,0,0,0.25)] transition-all duration-300">
           <div className="text-center mb-8">
             <h2 className="text-3xl font-bold text-slate-800 dark:text-white tracking-tight">
               {currentView === "login" && "Welcome back"}
@@ -283,7 +294,8 @@ const AuthContainer = ({ initialView = "login" }) => {
             </h2>
             <p className="text-sm text-slate-500 dark:text-zinc-400 mt-2 font-medium">
               {currentView === "login" && "Let's take a deep breath and log in"}
-              {currentView === "signup" && "Join us in stepping out of the loop"}
+              {currentView === "signup" &&
+                "Join us in stepping out of the loop"}
               {currentView === "otp" && "Check your inbox for the code"}
             </p>
           </div>
@@ -305,7 +317,10 @@ const AuthContainer = ({ initialView = "login" }) => {
             {currentView === "login" && (
               <form onSubmit={handleLogin} className="space-y-5">
                 <div className="space-y-1">
-                  <label htmlFor="email" className="block text-sm font-semibold text-slate-650 dark:text-zinc-300 pl-1">
+                  <label
+                    htmlFor="email"
+                    className="block text-sm font-semibold text-slate-650 dark:text-zinc-300 pl-1"
+                  >
                     Email
                   </label>
                   <input
@@ -322,7 +337,10 @@ const AuthContainer = ({ initialView = "login" }) => {
                 </div>
 
                 <div className="space-y-1">
-                  <label htmlFor="password" className="block text-sm font-semibold text-slate-650 dark:text-zinc-300 pl-1">
+                  <label
+                    htmlFor="password"
+                    className="block text-sm font-semibold text-slate-650 dark:text-zinc-300 pl-1"
+                  >
                     Password
                   </label>
                   <div className="relative">
@@ -342,7 +360,9 @@ const AuthContainer = ({ initialView = "login" }) => {
                       onClick={() => setShowPassword(!showPassword)}
                       disabled={isLoading}
                       className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 dark:text-zinc-500 hover:text-slate-700 dark:hover:text-white transition-colors cursor-pointer disabled:opacity-50"
-                      aria-label={showPassword ? "Hide password" : "Show password"}
+                      aria-label={
+                        showPassword ? "Hide password" : "Show password"
+                      }
                     >
                       {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                     </button>
@@ -381,7 +401,10 @@ const AuthContainer = ({ initialView = "login" }) => {
             {currentView === "signup" && (
               <form onSubmit={handleSignup} className="space-y-5">
                 <div className="space-y-1">
-                  <label htmlFor="username" className="block text-sm font-semibold text-slate-650 dark:text-zinc-300 pl-1">
+                  <label
+                    htmlFor="username"
+                    className="block text-sm font-semibold text-slate-650 dark:text-zinc-300 pl-1"
+                  >
                     Name
                   </label>
                   <input
@@ -398,7 +421,10 @@ const AuthContainer = ({ initialView = "login" }) => {
                 </div>
 
                 <div className="space-y-1">
-                  <label htmlFor="email" className="block text-sm font-semibold text-slate-655 dark:text-zinc-300 pl-1">
+                  <label
+                    htmlFor="email"
+                    className="block text-sm font-semibold text-slate-655 dark:text-zinc-300 pl-1"
+                  >
                     Email
                   </label>
                   <input
@@ -415,7 +441,10 @@ const AuthContainer = ({ initialView = "login" }) => {
                 </div>
 
                 <div className="space-y-1">
-                  <label htmlFor="password" className="block text-sm font-semibold text-slate-650 dark:text-zinc-300 pl-1">
+                  <label
+                    htmlFor="password"
+                    className="block text-sm font-semibold text-slate-650 dark:text-zinc-300 pl-1"
+                  >
                     Password
                   </label>
                   <div className="relative">
@@ -435,7 +464,9 @@ const AuthContainer = ({ initialView = "login" }) => {
                       onClick={() => setShowPassword(!showPassword)}
                       disabled={isLoading}
                       className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 dark:text-zinc-500 hover:text-slate-700 dark:hover:text-white transition-colors cursor-pointer disabled:opacity-50"
-                      aria-label={showPassword ? "Hide password" : "Show password"}
+                      aria-label={
+                        showPassword ? "Hide password" : "Show password"
+                      }
                     >
                       {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                     </button>
@@ -443,7 +474,10 @@ const AuthContainer = ({ initialView = "login" }) => {
                 </div>
 
                 <div className="space-y-1">
-                  <label htmlFor="confirmPassword" className="block text-sm font-semibold text-slate-650 dark:text-zinc-300 pl-1">
+                  <label
+                    htmlFor="confirmPassword"
+                    className="block text-sm font-semibold text-slate-650 dark:text-zinc-300 pl-1"
+                  >
                     Confirm Password
                   </label>
                   <div className="relative">
@@ -463,7 +497,9 @@ const AuthContainer = ({ initialView = "login" }) => {
                       onClick={() => setShowPassword(!showPassword)}
                       disabled={isLoading}
                       className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 dark:text-zinc-500 hover:text-slate-700 dark:hover:text-white transition-colors cursor-pointer disabled:opacity-50"
-                      aria-label={showPassword ? "Hide password" : "Show password"}
+                      aria-label={
+                        showPassword ? "Hide password" : "Show password"
+                      }
                     >
                       {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                     </button>
@@ -502,7 +538,10 @@ const AuthContainer = ({ initialView = "login" }) => {
             {currentView === "otp" && (
               <form onSubmit={handleVerifyOtp} className="space-y-5">
                 <div className="space-y-2 text-center">
-                  <label htmlFor="otp" className="block text-sm font-semibold text-slate-655 dark:text-zinc-300">
+                  <label
+                    htmlFor="otp"
+                    className="block text-sm font-semibold text-slate-655 dark:text-zinc-300"
+                  >
                     6-Digit Verification Code
                   </label>
                   <input
@@ -538,10 +577,11 @@ const AuthContainer = ({ initialView = "login" }) => {
                   type="button"
                   onClick={handleResendOtp}
                   disabled={timer > 0 || isLoading}
-                  className={`w-full py-3.5 font-semibold rounded-full text-sm transition-all duration-300 border ${timer > 0
-                    ? "bg-slate-50/50 dark:bg-slate-900/30 text-slate-400 dark:text-zinc-650 border-slate-100 dark:border-zinc-900/50 cursor-not-allowed"
-                    : "bg-white hover:bg-slate-50 dark:bg-slate-900 dark:hover:bg-slate-800/80 border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-200 cursor-pointer active:scale-[0.98] shadow-xs"
-                    }`}
+                  className={`w-full py-3.5 font-semibold rounded-full text-sm transition-all duration-300 border ${
+                    timer > 0
+                      ? "bg-slate-50/50 dark:bg-slate-900/30 text-slate-400 dark:text-zinc-650 border-slate-100 dark:border-zinc-900/50 cursor-not-allowed"
+                      : "bg-white hover:bg-slate-50 dark:bg-slate-900 dark:hover:bg-slate-800/80 border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-200 cursor-pointer active:scale-[0.98] shadow-xs"
+                  }`}
                 >
                   {timer > 0 ? `Resend in ${timer}s` : "Resend Code"}
                 </button>
