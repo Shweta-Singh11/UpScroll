@@ -104,8 +104,9 @@ const CaptionWriting = () => {
         formData.append("category", activity.title);
         formData.append("imageUrl", "");
         formData.append("caption", "");
+        if (currentEmail) {
         formData.append("email", currentEmail);
-
+      }
         const response = await fetch(
           `${import.meta.env.VITE_API_BASE_URL}/api/captions/evaluate`,
           {
@@ -128,8 +129,9 @@ const CaptionWriting = () => {
     setSelectedCtg(activity.title);
     try {
       // Send category and email to backend
+      const emailParam = currentEmail ? `&email=${encodeURIComponent(currentEmail)}` : "";
       const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/api/captions/image?category=${activity.title}&email=${currentEmail}`,
+        `${import.meta.env.VITE_API_BASE_URL}/api/captions/image?category=${activity.title}${emailParam}`,
         {
           method: "GET",
         },
@@ -155,9 +157,13 @@ const CaptionWriting = () => {
       formData.append("category", selectedCtg);
       formData.append("imageUrl", currentImg.url);
       formData.append("caption", caption);
-      formData.append("email", currentEmail);
+      if (currentEmail) {
+        formData.append("email", currentEmail);
+      }
 
+      
       const response = await fetch(
+        
         `${import.meta.env.VITE_API_BASE_URL}/api/captions/evaluate`,
         {
           method: "POST",
