@@ -64,31 +64,26 @@ const WordSearch = () => {
     }
   };
 
-  const syncGameStats = async (
+const syncGameStats = async (
     finalWords = wordsFound,
     attempts = gameAttempts
   ) => {
     if (syncStarted.current) return;
-
     const currentEmail = email || localStorage.getItem("email");
-
-    if (currentEmail && !email) {
-      setEmail(currentEmail);
-    }
-
+    if (currentEmail && !email) setEmail(currentEmail);
     syncStarted.current = true;
+
     try {
+      const emailParam = currentEmail ? `email=${encodeURIComponent(currentEmail)}&` : "";
+      
       const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/api/games/wordsearch/submit?email=${currentEmail}&wordsFound=${finalWords.length}&gameAttempts=${attempts}`,
-        {
-          method: "POST",
-        }
+        `${import.meta.env.VITE_API_BASE_URL}/api/games/wordsearch/submit?${emailParam}wordsFound=${finalWords.length}&gameAttempts=${attempts}`,
+        { method: "POST" }
       );
 
       if (!response.ok) throw new Error("Sync failed");
       const playerData = await response.json();
-      console.log("Official Player Data from Backend:", playerData);
-
+      
       setTotalAuraPoints(playerData.totalAuraPoints || 0);
       setScore(playerData.auraGained || 0);
     } catch (error) {
