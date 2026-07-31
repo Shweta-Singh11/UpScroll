@@ -111,7 +111,7 @@ const CaptionWriting = () => {
           {
             method: "POST",
             body: formData,
-          }
+          },
         );
 
         if (response.ok) {
@@ -132,7 +132,7 @@ const CaptionWriting = () => {
         `${import.meta.env.VITE_API_BASE_URL}/api/captions/image?category=${activity.title}&email=${currentEmail}`,
         {
           method: "GET",
-        }
+        },
       );
       const data = await response.json();
       setCurrentImg({ id: data.imageId, url: data.imageUrl });
@@ -162,7 +162,7 @@ const CaptionWriting = () => {
         {
           method: "POST",
           body: formData,
-        }
+        },
       );
 
       if (!response.ok) {
@@ -227,7 +227,7 @@ const CaptionWriting = () => {
             ></div>
             {/* Breathing Circle */}
             <div
-              className="bg-gradient-to-br from-indigo-500 via-blue-600 to-indigo-700 dark:from-cyan-400 dark:to-blue-600 rounded-full flex flex-col items-center justify-center shadow-[0_0_80px_rgba(79,70,229,0.2)] dark:shadow-[0_0_80px_rgba(34,211,238,0.3)] transition-all duration-4000 ease-in-out"
+              className="bg-linear-to-br from-indigo-500 via-blue-600 to-indigo-700 dark:from-cyan-400 dark:to-blue-600 rounded-full flex flex-col items-center justify-center shadow-[0_0_80px_rgba(79,70,229,0.2)] dark:shadow-[0_0_80px_rgba(34,211,238,0.3)] transition-all duration-4000 ease-in-out"
               style={{
                 width:
                   phase === "Breathe In" || phase === "Hold" ? "12rem" : "8rem",
@@ -289,12 +289,15 @@ const CaptionWriting = () => {
           <div className="relative bg-white dark:bg-zinc-950 p-1 rounded-[4rem] border border-red-500/30 shadow-[0_0_80px_rgba(220,38,38,0.2)] dark:shadow-[0_0_80px_rgba(220,38,38,0.3)] group">
             {/* Inner Border */}
             <div className="bg-slate-50 dark:bg-black px-16 py-20 rounded-[3.8rem] border-4 border-red-600 flex flex-col items-center text-center">
-              <h2 className="text-8xl font-black italic uppercase text-red-600 dark:text-transparent dark:bg-clip-text dark:bg-gradient-to-b dark:from-red-500 dark:to-red-800 mb-2 animate-bounce drop-shadow-[0_0_15px_rgba(220,38,38,0.6)]">
+              <h2 className="text-8xl font-black italic uppercase text-red-600 dark:text-transparent dark:bg-clip-text dark:bg-linear-to-b dark:from-red-500 dark:to-red-800 mb-2 animate-bounce drop-shadow-[0_0_15px_rgba(220,38,38,0.6)]">
                 CAUGHT!
               </h2>
 
               <p className="text-red-500/80 font-black uppercase tracking-[0.3em] text-sm mb-12">
-                Captured in 4K • <span className="text-slate-900 dark:text-white font-bold">-50 Aura Points</span>
+                Captured in 4K •{" "}
+                <span className="text-slate-900 dark:text-white font-bold">
+                  -50 Aura Points
+                </span>
               </p>
 
               {/* Aura Display Card */}
@@ -304,7 +307,9 @@ const CaptionWriting = () => {
                 </span>
                 <div className="text-3xl text-slate-900 dark:text-white font-mono font-bold flex items-center gap-3 justify-center">
                   {feedback?.totalAuraPoints || "Loading..."}
-                  <span className="text-slate-400 dark:text-zinc-600 text-sm">pts</span>
+                  <span className="text-slate-400 dark:text-zinc-600 text-sm">
+                    pts
+                  </span>
                 </div>
               </div>
 
@@ -314,7 +319,7 @@ const CaptionWriting = () => {
                 className="group relative px-16 py-6 bg-red-600 overflow-hidden rounded-2xl font-black uppercase tracking-widest text-white transition-all hover:scale-105 active:scale-95 shadow-[0_0_40px_rgba(220,38,38,0.4)] cursor-pointer"
               >
                 <span className="relative z-10">Surrender</span>
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-shimmer" />
+                <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-shimmer" />
               </button>
             </div>
           </div>
@@ -326,7 +331,7 @@ const CaptionWriting = () => {
           <div className="w-full max-w-6xl mx-auto animate-in fade-in slide-in-from-bottom-4">
             <h1 className="text-5xl md:text-7xl font-black uppercase italic text-center tracking-tighter leading-[0.9] mb-4">
               Caption{" "}
-              <span className="bg-gradient-to-r from-indigo-600 to-blue-500 dark:from-cyan-400 dark:to-blue-400 bg-clip-text text-transparent pr-4">
+              <span className="bg-linear-to-r from-indigo-600 to-blue-500 dark:from-cyan-400 dark:to-blue-400 bg-clip-text text-transparent pr-4">
                 writing
               </span>
             </h1>
@@ -373,7 +378,10 @@ const CaptionWriting = () => {
             {/*Category Name */}
             <header className="mb-16 text-center">
               <h1 className="text-4xl md:text-6xl font-black italic uppercase tracking-tighter text-slate-900 dark:text-white">
-                Category: <span className="text-indigo-600 dark:text-cyan-400">{selectedCtg}</span>
+                Category:{" "}
+                <span className="text-indigo-600 dark:text-cyan-400">
+                  {selectedCtg}
+                </span>
               </h1>
               <div className="h-1.5 w-82 bg-indigo-600 dark:bg-cyan-500 mx-auto mt-6 rounded-full shadow-[0_0_20px_rgba(99,102,241,0.2)] dark:shadow-[0_0_20px_rgba(34,211,238,0.6)]"></div>
             </header>
@@ -385,10 +393,10 @@ const CaptionWriting = () => {
                   <img
                     src={currentImg.url}
                     alt="Neural Target"
-                    className="w-full h-auto max-h-[500px] object-contain rounded-2xl"
+                    className="w-full h-auto max-h-125 object-contain rounded-2xl"
                   />
                 ) : (
-                  <div className="h-[400px] w-full flex items-center justify-center">
+                  <div className="h-100 w-full flex items-center justify-center">
                     <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-indigo-600 dark:border-cyan-500"></div>
                   </div>
                 )}
@@ -453,7 +461,9 @@ const CaptionWriting = () => {
                         </p>
                         <p className="text-slate-950 dark:text-white font-black text-3xl tracking-tighter">
                           {feedback.auraGained} /{" "}
-                          <span className="text-2xs text-slate-400 dark:text-zinc-700">60</span>
+                          <span className="text-2xs text-slate-400 dark:text-zinc-700">
+                            60
+                          </span>
                         </p>
                       </div>
                     </div>
@@ -518,7 +528,8 @@ const CaptionWriting = () => {
                     {feedback && (!email || email === "") && (
                       <div className="mt-8 p-6 bg-indigo-50 dark:bg-cyan-500/5 border border-indigo-200 dark:border-cyan-500/20 rounded-3xl animate-in fade-in slide-in-from-bottom-2 text-center">
                         <p className="text-[10px] font-black text-indigo-600 dark:text-cyan-400 uppercase tracking-[0.2em] mb-4">
-                          To permanently save these {feedback.auraGained} Aura Points
+                          To permanently save these {feedback.auraGained} Aura
+                          Points
                         </p>
                         <button
                           onClick={() => navigate("/signup")}
