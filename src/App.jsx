@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Analytics } from '@vercel/analytics/react';
 import Home from './pages/Home';
 // import SignUp from './pages/auth/SignUp';
 // import Login from './pages/auth/Login';
@@ -47,6 +47,7 @@ function App() {
         </main>
 
         <Footer />
+        <Analytics />
       </div>
     </Router>
   );
